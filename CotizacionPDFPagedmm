@@ -1,0 +1,564 @@
+<apex:page standardController="Quote" extensions="CotizacionPDFController" renderAs="PDF" standardStylesheets="false" applyHtmlTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+<html>
+    <head>
+        <style>
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+
+                margin-top: 1.00cm;
+                margin-bottom: 1.50cm;
+            }
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            body {
+                font-size: 6.0pt;
+                font-family: sans-serif;
+            }
+             .estilo1 { 
+            font-size: 16.0pt;
+            font-family: sans-serif;
+           } 
+            .detailTable{
+                width: 100%;
+            }
+            .detailTable td, .detailTable th {
+                width: 40%;
+            }
+            .quoteLineTable{
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .headerTable{
+                background-color: #ADB1B4;
+                color: white;
+            }
+            .detailrowTable{
+                border-right: 1px solid #D9D9D9 ;
+                background-color: #FBFBFB;
+            }
+            .detailrowlastTable{
+                background-color: #FBFBFB;
+            }
+            .new-doc {
+                page-break-after: always;
+                text-align: justify;
+            }
+            .right-col {
+                float: right;
+                width: 48%;
+                text-align: justify;
+            }
+            .left-col {
+                float: left;
+                width: 48%;
+                text-align: justify;
+            }
+            .underline-cell {
+                border-bottom: 1px solid #ddd;
+            }
+            p {
+                margin: 0;
+                padding: 0;
+            }
+            ol, ul {
+                padding: 0 5px;
+                margin: 0 5px;
+            }
+            ol[start="4"]{
+                counter-reset: start 4;
+            }
+            ol[start="4"] > li {
+                display: block;
+            }
+            ol[start="4"] > li:before {
+                content: counter(start) ". "; 
+                counter-increment: start;
+            }
+            ol.lower-alpha {
+                list-style-type: lower-alpha;
+            }
+            strong.clausula {
+                text-decoration: underline;
+            }
+            .messageCell > * {
+                font-size: 2.5em;
+                color: red;
+            }
+            .polig{ 
+            width:20px; 
+            height:20px; 
+            background:#FFFFFF; 
+            border:solid 3px #626567 ;
+            font-family:arial; 
+            font-weight:bold; 
+            color:#EEEEEE; 
+           } 
+           .dmm{ 
+            width:8px; 
+            height:8px; 
+            background:#FFFFFF; 
+            border:solid 1px #626567 ;
+            font-family:arial; 
+            font-weight:bold; 
+            color:#EEEEEE; 
+           } 
+           
+           
+        </style>
+    </head>
+    <body>
+        <apex:form >
+            <div class="header">
+                    <table style="width: 100%;height: 20%;" >
+                    <tr>
+                        <td style="text-align: right;" >
+                        <apex:image width="50%" height="50%" id="logoVialli" value="{!$Resource.logo}" />                        
+                        </td>                
+                    </tr> 
+                     <tr>
+                        <td style="text-align: LEFT;  font-size: 8pt;" >                  
+                        <apex:outputText value="{0, date, YYYY '/' MM '/' dd}">
+                         Fecha Impresión Documento:  <apex:param value="{!TODAY()}" /> 
+                        </apex:outputText>
+                        </td>                
+                    </tr> 
+                     
+                </table>
+            </div>
+            <apex:outputPanel rendered="{!direccionCompleta == false}">
+                <apex:pageMessages escape="false"/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c != cotizacion.Total_Pagos__c)}">
+                <apex:pageMessages />
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c == cotizacion.Total_Pagos__c)}">
+              
+                <!-- FIN CLÁUSULAS  -->
+ <!--anexo 1 __________________________________________________________________________________- -->
+                <div id="anexo-1" style="text-align: left;" >
+                 <br/>
+                   <h2 style=" font-size: 12pt; margin:-2.0% 0;">Carátula de Expediente</h2>
+                  <h2 style=" font-size: 10pt;">______________________________</h2> 
+                  <br />  <br /> <br />
+                  
+                  
+                  
+   <table style=" font-size: 8pt; width:100%" >
+      <tr>
+        
+        <th style="width:50px"><h3><u>Datos del Cliente</u></h3></th>
+        <th style="width:50px"><h3><u>Datos de la vivienda</u></h3></th> 
+        <th style="width:50px"><h3><u>Oportunidad</u></h3></th>
+      </tr>
+      <tr>
+        <td style="width:50px; vertical-align: top;">
+                                <b>Número EK: </b>
+                                    {!oportunidad.No_EnKontrol__c}
+                                    <br/>
+                                    <b>Nombre: </b>
+                                {!oportunidad.Account.Name}
+                                <br/>
+                                 <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name != 'Persona Moral'
+                                            )}">
+                                    <b>Estado Civil: </b>
+                                    {!oportunidad.Account.Estado_civil__c}
+                                    <br/>
+                                    <b>Edad: </b>
+                                    {!oportunidad.Account.Edad__c}
+                                    <br/>
+                                    <b>Teléfono: </b>
+                                    {!oportunidad.Account.Phone}
+                                    <br/>
+                                    <b>Celular: </b>
+                                    {!oportunidad.Account.PersonMobilePhone}
+                                    <br/>
+                                    <b>Correo electrónico: </b>
+                                    {!oportunidad.Account.PersonEmail}
+                                    <br/>
+                                    <b>Calle y Número: </b> 
+                                    {!oportunidad.Account.BillingStreet}
+                                     <br/>
+                                    <b>Colonia: </b>
+                                    {!oportunidad.Account.Colonia__c}
+                                     <br/>
+                                    <b>Municipio: </b>
+                                    {!oportunidad.Account.BillingCity}
+                                     <br/>
+                                    <b>C.P.: </b>
+                                    {!oportunidad.Account.BillingPostalCode}
+                                     <br/>
+                                    <b>Estado: </b>
+                                    {!oportunidad.Account.BillingState}
+                                </apex:outputPanel>
+        </td>
+        
+        <td style="width:50px;">
+        <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem" >
+                                <b>Desarrollo: </b>
+                                {!casa.PricebookEntry.Product2.Desarrollo__r.Name}
+                                <br />
+                                  <b>Referencia: </b>{!quoteItem.PricebookEntry.Product2.Name}                               
+                                 </apex:repeat><br />
+                                 
+                                <b>Manzana: </b>
+                                {!casa.PricebookEntry.Product2.MZN__c}
+                                <br /> 
+                                <b>Lote: </b>
+                                {!casa.PricebookEntry.Product2.Lote__c}
+                                <br /> 
+                                
+                                <b>Prototipo: </b>
+                                {!casa.PricebookEntry.Product2.PrototipoLookUp__r.Name}
+                                <br /> 
+                                <b>m<sup>2</sup> de construcción: </b>
+                                {!casa.PricebookEntry.Product2.Const_M2__c}
+                                <br /> 
+                                <b>m<sup>2</sup> de terreno: </b>
+                                {!casa.PricebookEntry.Product2.Terreno_M2__c}
+                                <br />   
+                               
+                                    <b>Fecha habitabilidad: </b>
+                                       
+                                       
+                                        <apex:outputText value="{0, date, MMMM d','  yyyy}">
+                                          <apex:param value="{!casa.PricebookEntry.Product2.Fecha_de_Habitabilidad__c}" /> 
+                                        </apex:outputText>
+                                   <br/>
+                                     <b>Avance Casa (%): </b>
+                                     {!casa.PricebookEntry.Product2.Avance_Casa__c}%
+ 
+                                    <br/>
+                                     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.Lista_para_Avaluo__c = true)}">
+                                      <P> <b> Lista Avaluo: </b>   <apex:image value="{!$Resource.D_boton_true}" width="10" height="12" /></p> 
+                                    </apex:outputPanel>
+                                    
+                                     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.Lista_para_Avaluo__c = false)}">
+                                      <P> <b> Lista Avaluo: </b>   <apex:image value="{!$Resource.D_boton_false}" width="10" height="12" /></p> 
+                                    </apex:outputPanel>
+                                     
+                                     
+                                    <br/>
+        </td>
+        
+        
+        <td style="width:50px; "> 
+                      <b>Oportunidad: </b>
+                      <br />
+                      <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem" > 
+                                   <p style=" font-size: 8pt;">{!quoteItem.PricebookEntry.Product2.Name} ( {!oportunidad.No_EnKontrol__c} ) {!oportunidad.Account.Name}</p></apex:repeat>
+                      
+                      <b>Propietario de oportunidad: </b>{!oportunidad.Asesor_Externo_Original__c}
+                      <br />
+                      <b>Asesor Original: </b>{!oportunidad.Name_cv__c}
+                      <br />          
+                      <b>Fecha separación:</b><apex:outputText value="{0, date, MMMM d','  yyyy}"> <apex:param value="{!oportunidad.Fecha_de_Separacion__c}"/></apex:outputText>
+                      <br />       
+                      <b>Fecha Venta:  </b><apex:outputText value="{0, date, MMMM d','  yyyy}"> <apex:param value="{!oportunidad.Fecha_de_Venta__c}"/></apex:outputText>
+                      <br /> 
+                       <b>Inmobiliaria: </b>{!oportunidad.Inmobiliaria__r.name}
+                      <br />
+                      <b>&nbsp; </b>
+                      <br />
+                      <b>&nbsp; </b>
+                      <br />          
+                      <b>&nbsp; </b>
+                      <br />       
+                      <b>&nbsp; </b>
+                      <br /> 
+                       
+                       <b>&nbsp;</b>
+                      <br /> 
+           </td>                    
+      </tr>
+        
+    </table>
+                   
+                       
+                                  
+                      
+                     
+                              
+                                
+                                
+                                 <h3 style=" font-size: 8pt;"> </h3>
+                    
+                                <table align="center" border="0"  width="100%" cellpadding="0" cellspacing="0"  style=" font-size: 8pt;">
+                                    <tr>
+                                        <th><u>Producto</u></th>
+                                        <th><u>Tipo</U></th>
+                                        <th align="Center" ><u>Cantidad</u> </th>
+                                        <th align="right" ><u>Precio Lista</u> </th>
+                                        <th align="right" ><u>Sub Total</u></th>
+                                        <th align="right" ><u>Descuento</u></th> 
+                                        <th align="right" ><u>Precio Total</u></th>
+                                        
+                                    </tr>
+                                   
+                                    <apex:repeat first="0" value="{!lstQuoteLineItem}" var="quoteItem">
+                                        <tr>
+                                            <td> {!quoteItem.PricebookEntry.Product2.Name}</td>
+                                            <td>{!quoteItem.PricebookEntry.Product2.RecordType.Name}</td>
+                                             <td style="text-align: center;">
+                                                <apex:outputText value="{0, , currency}">
+                                                    <apex:param value="{!quoteItem.Quantity}"/>
+                                                </apex:outputText>
+                                            </td>
+                                             
+                                             <td style="text-align: right;">
+                                                <apex:outputText value="{0,number , currency}">
+                                                    <apex:param value="{!quoteItem.ListPrice}"/>
+                                                </apex:outputText>
+                                            </td>
+                                              <td style="text-align: right;">
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!quoteItem.Subtotal}"/>
+                                                </apex:outputText>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <apex:outputText value="{0,,00}">
+                                                    <apex:param value="{!quoteItem.Discount}"/>
+                                                </apex:outputText>
+                                                %
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!quoteItem.TotalPrice}"/>
+                                                </apex:outputText>
+                                            </td>
+                                             
+                                        </tr>
+                                    </apex:repeat>    
+                                </table>
+                                  
+               
+ <br> </br>        
+                   
+<table align="center" border="0"  width="100%" cellpadding="0" cellspacing="0"  style=" font-size: 8pt;"  >   
+  <tr>
+    <td><H3 style=" margin:.5% 0;" width="100%"><u>Condiciones de pago </u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h3></td>
+    <td><H3 style=" margin:.5% 0;" width="100%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<u>Precio total</u></H3></td>
+  </tr>
+</table>              
+                   
+<table align="center" border="0"  width="100%" cellpadding="0" cellspacing="0"  style=" font-size: 8pt;"  >                 
+
+  <tr  style=" margin:-1.5% 0;">
+    <td><b>Método de pago:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>  
+    <td style="text-align: right;">{!cotizacionConPagos.Tipo_de_Metodo_de_Pago__c}</td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+    <td ><b>Precio de la vivienda:</b> </td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td style="text-align: right;"> <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacion.Total_Casa__c - cotizacion.Total_Descuento_Casa__c}" />
+                                </apex:outputText></td>
+  </tr>
+
+  <tr style=" margin:-1.5% 0;">
+    <td><b>Institución y plazo:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;</td>
+    <td style="text-align: right;">{!cotizacionConPagos.Metodo_de_Pago__c}</td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td><b>Precio adicional:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+    <td style="text-align: right;"><apex:outputText value="{0, number, currency}">
+                                     <apex:param value="{!cotizacion.Total_a_Pagar__c - (cotizacion.Total_Casa__c - cotizacion.Total_Descuento_Casa__c)}" />
+                                </apex:outputText></td>
+  </tr>
+  
+    <tr style=" margin:-1.5% 0;">
+    <td><b>Importe crédito hipotecario:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;</td>
+    <td style="text-align: right;"><apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacionConPagos.Credito__c}" />
+                                </apex:outputText></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+    <td><b>Precio total:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td style="text-align: right;"><apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacion.Total_a_Pagar__c}" />
+                                </apex:outputText>  </td>
+  </tr>
+  
+    <tr style=" margin:-1.5% 0;">
+    <td><b>Importe crédito Infonavit o Fovissste:</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;</td>
+    <td style="text-align: right;"> <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Credito_Infonavit__c, 
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste', 
+                                                cotizacionConPagos.Credito_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+  </tr>
+  
+    <tr>
+    <td><b>Saldo subcuenta (ahorro Infonavit o Fovissste):</b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;</td>
+    <td style="text-align: right;"><apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Ahorro_Infonavit__c, 
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste', 
+                                                cotizacionConPagos.Ahorro_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+  </tr>
+    
+    <tr>
+    <td><b></b></td>
+    <td style="text-align: right;">&nbsp;&nbsp;</td>
+    <td style="text-align: right;"></td>
+    <td style="text-align: right;">&nbsp;&nbsp;&nbsp;</td>
+  </tr>
+  
+</table>
+ 
+            <table style="font-size: 8pt;: top; width: 100%;">                    
+                       <tr>
+                            <th><h3><u>Plan de pagos</u></h3></th>
+                        </tr>
+                         <tr class="row-head">
+                                        <th style="width: 10%;">Fecha</th>
+                                        <th style="width: 20%;text-align: right;">Monto</th>
+                                        <th >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+                                         <th >Tipo</th>
+                                    </tr>
+                                    <apex:repeat value="{!lstPagos}" var="pago">
+                                        <tr>
+                                            <td style="width: 20%;" >
+                                                <apex:outputText value="{0, date, yyyy'/'MM'/'dd}">
+                                                    <apex:param value="{!pago.Fecha__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!pago.Monto__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                             <td style="text-align: right;">
+                                             
+                                             </td>
+                                            <td style="width: 55%;text-align: LEFT;">
+                                                {!pago.Tipo__c}
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                        </table>
+                        
+                        
+                        
+      <table style="font-size: 8pt;: top; width: 100%;">                    
+         <tr>
+            <th style="width: 30%;">Total:</th>
+           <th>
+            <apex:repeat first="0" rows="1" value="{!lstQuoteLineItem}" var="quoteItem">
+                <apex:outputText value="{0, number, currency}">
+                        <apex:param value="{!quoteItem.TotalPrice}"/>
+                </apex:outputText>
+            </apex:repeat>    
+           </th>
+         </tr>
+        </table>      
+        
+                   
+                                        
+                    <br /> <br /> <br /> <br /> <br />
+                     <center>                
+<table style="font-size: 8pt;: top; width: 100%;"> 
+  <tr>
+    <td>_______________________________</td>
+
+    <td>_______________________________</td>
+
+    <td>_______________________________</td>
+
+  </tr>
+  
+   <tr>
+  
+ <td><b> Gerente de Ventas</b></td>
+
+    <td><b>Director de Ventas</b></td>
+
+    <td><b>Director de Desarrollos</b></td>
+
+  </tr>
+  
+    <tr>
+    <td>Fecha:_________ Iniciales:______</td>
+
+    <td>Fecha:_________ Iniciales:______</td>
+
+    <td>Fecha:_________ Iniciales:______</td>
+
+  </tr>
+  
+  
+</table>
+         </center>            
+         
+           <br /> <br /> <br /> 
+                    
+   <center>                
+<table style="font-size: 8pt;: top; width: 100%;"> 
+  <tr>
+    <td>_______________________________</td>
+
+    <td>_______________________________</td>
+
+    <td>_______________________________</td>
+
+  </tr>
+  
+   <tr>
+    <td><b>Mesa de Control </b></td>
+
+    <td><b>Cobranza</b></td>
+
+    <td><b>Administración de Ventas</b></td>
+
+  </tr>
+  
+  
+      <tr>
+    <td>Fecha:_________ Iniciales:______</td>
+
+    <td>Fecha:_________ Iniciales:______</td>
+
+    <td>Fecha:_________ Iniciales:______</td>
+
+  </tr>
+</table>
+         </center>            
+                    
+                </div>
+             
+ </apex:outputPanel>
+
+
+
+        </apex:form>
+    </body>
+</html>
+</apex:page>
