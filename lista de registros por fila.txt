@@ -1,0 +1,11 @@
+<apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem">
+<tr>
+  <td>
+    <apex:outputText value="{0, number, currency}">  
+      <apex:param value="{!quoteItem.TotalPrice}"/>
+    </apex:outputText>
+  </td>
+</tr>
+</apex:repeat>
+
+
