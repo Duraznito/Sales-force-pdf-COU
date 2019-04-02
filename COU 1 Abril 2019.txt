@@ -1,0 +1,2648 @@
+Cou-testing new 1 de abril 2018
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<apex:page standardController="Quote" extensions="CotizacionPDFController" renderAs="PDF" standardStylesheets="false" applyHtmlTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+<html>
+    <head>
+        <style>
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+
+                margin-top: 1.00cm;
+                margin-bottom: 1.50cm;
+            }
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            
+            
+          
+            div.up{
+                padding: 8px;
+                z-index:9;
+                position:absolute;
+                right:1em;
+                top:1px;
+                margin-top:-7px;
+            }
+            
+            
+            
+            
+            body {
+                font-size: 6.0pt;
+                font-family: sans-serif;
+            }
+             .estilo1 {
+            font-size: 16.0pt;
+            font-family: sans-serif;
+           }
+            .detailTable{
+                width: 100%;
+            }
+            .detailTable td, .detailTable th {
+                width: 50%;
+            }
+            .quoteLineTable{
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .headerTable{
+                background-color: #ADB1B4;
+                color: white;
+            }
+            .detailrowTable{
+                border-right: 1px solid #D9D9D9 ;
+                background-color: #FBFBFB;
+            }
+            .detailrowlastTable{
+                background-color: #FBFBFB;
+            }
+            .new-doc {
+                page-break-after: always;
+                text-align: justify;
+            }
+            .right-col {
+                float: right;
+                width: 48%;
+                text-align: justify;
+            }
+            .left-col {
+                float: left;
+                width: 48%;
+                text-align: justify;
+            }
+            .underline-cell {
+                border-bottom: 1px solid #ddd;
+            }
+            p {
+                margin: 0;
+                padding: 0;
+            }
+            ol, ul {
+                padding: 0 5px;
+                margin: 0 5px;
+            }
+            ol[start="4"]{
+                counter-reset: start 4;
+            }
+            ol[start="4"] > li {
+                display: block;
+            }
+            ol[start="4"] > li:before {
+                content: counter(start) ". ";
+                counter-increment: start;
+            }
+            ol.lower-alpha {
+                list-style-type: lower-alpha;
+            }
+            strong.clausula {
+                text-decoration: underline;
+            }
+            .messageCell > * {
+                font-size: 2.5em;
+                color: red;
+            }
+            .polig{
+            width:20px;
+            height:20px;
+            background:#FFFFFF;
+            border:solid 3px #626567 ;
+            font-family:arial;
+            font-weight:bold;
+            color:#EEEEEE;
+           }
+           .dmm{
+            width:8px;
+            height:8px;
+            background:#FFFFFF;
+            border:solid 1px #626567 ;
+            font-family:arial;
+            font-weight:bold;
+            color:#EEEEEE;
+           }
+
+            .texto-encima{
+            position: absoluta;
+            top: 10px;
+            left: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        
+        
+        <div  style="text-align: left;" class="new-doc">
+              <center><Br /><Br />
+             DESARROLLO INMOBILIARIO “{!desarrollo.Nombre_largo__c}”
+               <Br />
+                <strong>{!desarrollo.Razon_social_fiscal__c}</strong><Br />
+               R.F.C. VUI-140326-3I5    |    TEL. (442) 1990267
+            </center>
+            
+            
+            <div class="up">
+            <table  align="right">
+              <tr>
+                <td border=" 1px solid black">
+                  <p> Fecha:{!hoy}</p>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                 Lugar de expedición: {!desarrollo.Lugar_de_Expedici_n__c}
+               
+               
+                </td>
+              </tr>
+            </table>
+            </div>
+            
+            
+            
+             <Br /><Br /><Br />
+ 
+             <p>SOLICITUD DE COMPRA DE VIVIENDA UBICADA EN “{!desarrollo.Nombre_largo__c}”.</p>
+ 
+ 
+              <Br /><Br /><Br />
+               <strong>1. Datos del Interesado: </strong>
+               <table  width="100%" >
+                  <tr>
+                    <td style="border: 1px solid black;height: 20px;" COLSPAN="2">
+                       Nombre Completo:  <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name == 'Persona Moral')}"> <strong>{!cotizacion.Contact.Name}</strong>
+                                        </apex:outputPanel>
+                                                                                                                                     <strong>{!oportunidad.Account.Name}</strong>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black;height: 20px;" COLSPAN="2">
+                       Dirección: {!oportunidad.Account.BillingStreet}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid black;height: 20px;"  width="50%" ROWSPAN="2">
+                       Estado Civil:  {!oportunidad.Account.Estado_civil__c}
+                    </td>
+                         <TD style="border: 1px solid black;height: 20px;"  width="50%">
+                           Régimen Matrimonio:   
+                           
+                         </TD>
+                 </TR>
+                 <TR>
+                         <TD style="border: 1px solid black;height: 20px;"  width="50%">
+                           Nombre de cónyuge:
+                         </TD>
+                 </tr>   
+                 
+               </table>
+            
+            <table width="100%">
+                      <tr>
+                          <td colspan="2" style="border: 1px solid black;height: 20px;" width="50%" > Colonia: {!oportunidad.Account.Colonia__c}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C.P. {!oportunidad.Account.BillingPostalCode}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ciudad: {!oportunidad.Account.BillingState}</td>
+                          <td colspan="2" style="border: 1px solid black;height: 20px;">País: </td>
+                      </tr>
+
+                      <tr>
+                          <td style="border: 1px solid black;height: 20px;">Teléfono 1: {!oportunidad.Account.Phone}</td>
+                          <td style="border: 1px solid black;height: 20px;">Teléfono 2: {!oportunidad.Account.PersonMobilePhone}</td>
+                          <td colspan="2" style="border: 1px solid black;height: 20px;" width="50%" >RFC:  {!oportunidad.Account.RFC__c}</td>
+                      </tr>
+                       <tr>
+                          <td colspan="2" style="border: 1px solid black;height: 20px;" width="50%" >E-mail: {!oportunidad.Account.PersonEmail}</td>
+                          <td colspan="2" style="border: 1px solid black;height: 20px;" width="50%" >E-mail:</td>
+                      </tr>
+               </table>
+            
+                  <Br /><Br /><Br />
+               <strong>2. Datos de la Vivienda que pretende adquirir: </strong>
+ 
+                      <TABLE width="100%">                        
+                        <TR>
+                          <TD ROWSPAN="2" style="border: 1px solid black;height: 20px;" width="14%">
+                                <strong>VIVIENDA: 
+                                        <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem" >
+                                            {!quoteItem.PricebookEntry.Product2.Name}
+                                        </apex:repeat>
+                                </strong>
+                          </TD>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                Número de casa:
+                                           <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem" >
+                                                {!quoteItem.PricebookEntry.Product2.Name}
+                                           </apex:repeat>
+                          </TD>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                Manzana: {!casa.PricebookEntry.Product2.MZN__c}, lote número: {!casa.PricebookEntry.Product2.Lote__c} 
+                          </TD>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                
+                          </TD>
+                        </TR>
+                        <TR>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                Superficie Terreno: {!casa.PricebookEntry.Product2.Terreno_M2__c} <b>m<sup>2</sup> </b>
+                          </TD>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                M2 Construcción: {!casa.PricebookEntry.Product2.Const_M2__c} <b>m<sup>2</sup> </b>
+                          </TD>
+                          <TD style="border: 1px solid black;height: 20px;" width="14%">
+                                
+                          </TD>
+                        </TR>
+                      </TABLE>
+                    
+                      
+                   <Br /><Br /><Br />
+               <strong>3. Valor de Vivienda y condiciones de pago </strong>
+ 
+                      <TABLE width="100%">                        
+                          <tr>
+                            <td style="border: 1px solid black;height: 20px;" width="30%">
+                              <Strong>VALOR DE LA VIVIENDA</Strong>
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;" width="100%">
+                               <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem">
+                                     <apex:outputText value="{0, number, currency}">  
+                                       <apex:param value="{!quoteItem.TotalPrice}"/>
+                                     </apex:outputText>
+                                </apex:repeat>
+                            </td>                   
+                          </tr>
+                          <tr>
+                            <td style="border: 1px solid black;height: 20px;">
+                              <Strong>Forma de Pago:</Strong>
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;">
+                             {!cotizacionConPagos.Tipo_de_Metodo_de_Pago__c}
+                            </td>
+                          </tr>
+                           <tr>
+                            <td style="border: 1px solid black;height: 20px;">
+                              <Strong>Institución:</Strong>
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;">
+                              {!cotizacionConPagos.Metodo_de_Pago__c}
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="border: 1px solid black;height: 20px;">
+                              <Strong>Importe Crédito Hipotecario:</Strong> 
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;">
+                                 <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacionConPagos.Credito__c}" />
+                                </apex:outputText>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="border: 1px solid black;height: 20px;" width="30%">
+                              <Strong>Importe Crédito Infonavit o Fovissste:</Strong>&nbsp;
+                              
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;" width="30%">
+                              
+                              
+                                      <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Credito_Infonavit__c,
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste',
+                                                cotizacionConPagos.Credito_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText>
+                              
+                            </td>
+                           
+                          </tr>
+                          
+                           <tr>
+                            <td style="border: 1px solid black;height: 20px;">
+                              <strong>Saldo Subcuenta (ahorro Infonavit o Fovissste):</strong>
+                            </td>
+                            <td style="border: 1px solid black;height: 20px;">
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Ahorro_Infonavit__c,
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste',
+                                                cotizacionConPagos.Ahorro_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText>
+                            </td>
+                          </tr>
+                      </TABLE>
+                      
+                      <Br /><Br /><Br />
+                      <strong>4. Depósitos en Garantía de la Oferta </strong>
+                      
+                      
+                      <table style="width: 100%;">
+                       
+                         <tr class="row-head">
+                                        <th style="width: 25%;">Depósito</th>
+                                        <th style="width: 25%;">Monto</th>
+                                        <th style="width: 25%;">Cantidad Letra</th>
+                                        <th style="width: 25%;">Fecha</th>
+                                    </tr>
+                                    <apex:repeat value="{!lstPagos}" var="pago">
+                                        <tr>
+                                            <td style="width: 25%;border: 1px solid black;height: 20px;" >
+                                                {!pago.Tipo__c}
+                                            </td>
+                                            <td style="width: 25%; border: 1px solid black;height: 20px;" >
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!pago.Monto__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                            <td style="width: 25%; border: 1px solid black;height: 20px;" >
+                                                                                                     
+                                            </td>
+                                             <td style="width: 25%; border: 1px solid black;height: 20px;" >
+                                                <apex:outputText value="{0, date, yyyy'/'MM'/'dd}">
+                                                    <apex:param value="{!pago.Fecha__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                            
+                                            
+                                        </tr>
+                                    </apex:repeat>
+                        </table>
+                        
+                        
+                        
+                         <div class="new-doc"><Br /><Br /><Br />
+                               <center>
+                                       <strong>El Ofertante</strong>
+                                       <Br /> <Br /> <Br /> 
+                                       ________________________________________________<Br />
+                                        <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                            )}">
+                                <strong>{!cotizacion.Contact.Name}</strong>
+                                <br />
+                            </apex:outputPanel>
+                            <strong>{!oportunidad.Account.Name}</strong>
+                                </center>
+                          </div>
+ 
+        </div>   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <apex:form >
+            <div class="header">
+                <table style="width: 100%;height: 100%;" >
+                    <!-- <tr>
+                        <td style="text-align: left;" ><apex:image width="60%" height="60%" id="logoVialli" value="{!$Resource.logo}" /></td>
+                        <td style="text-align: right;" ><apex:image width="40%" height="40%" id="logoFocus"  value="{!$Resource.logofocus}"/></td>
+                    </tr> -->
+                </table>
+            </div>
+            
+            
+            <apex:outputPanel rendered="{!direccionCompleta == false}">
+                <apex:pageMessages escape="false"/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c != cotizacion.Total_Pagos__c)}">
+                <apex:pageMessages />
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c == cotizacion.Total_Pagos__c)}">
+                
+                <!-- CLÁUSULAS carta oferta unilateral-->
+                <div id="clausulas" class="">
+                
+                    <div class="left-col"><Br /><Br /><Br /><Br /><Br />
+                        <p style="text-align: right;"><strong>Querétaro, Querétaro, a {!hoy}</strong></p>
+                        <p><Br />
+                            <strong>{!desarrollo.Razon_social_fiscal__c} (en el sucesivo “{!desarrollo.Razon_comercial__c}”).</strong>
+                        </p>
+                        <p><Br /><strong>P R E S E N T E S.</strong></p>
+                        <br />
+                        <p>
+                           <strong>C. {!oportunidad.Account.Name}</strong>, por mi propio derecho, hago de su conocimiento que por este medio presento voluntaria y formalmente ante esta institución como EL DESARROLLADOR y representante del desarrollo inmobiliario denominado <strong>“{!desarrollo.Nombre_largo__c}”</strong>,  (el “{!desarrollo.Razon_comercial__c}”) para los efectos a los que haya lugar, una oferta unilateral de compra o adquisición, en lo sucesivo <strong>“LA OFERTA“</strong>, respecto del Lote que se menciona detalladamente en la solicitud de compra de la presente, perteneciente a la UNIDAD CONDOMINAL {!desarrollo.Nombre_largo__c}, ubicado en el Municipio de Querétaro, estado de Querétaro y la vivienda prototipo que en este mismo anexo se menciona, que en un futuro será construida sobre el lote de terreno mencionado, con las especificaciones, ante-proyecto y demás documentación que se acompaña a la presente como <strong>ANEXO 1</strong>, en lo sucesivo “LA VIVIENDA”.
+                         </p>
+                        
+                        <p><Br />
+                            <strong>“LA OFERTA”</strong> se presenta con base en los siguientes:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                            <Br /><Br />
+                            <center><strong>TERMINOS Y CONDICIONES</strong></center> 
+                         </p>
+                         
+                        <p><Br />
+                            <strong class="clausula">PRIMERO.</strong> El presente documento constituye una oferta unilateral,
+                            voluntaria y expresa, para comprar o adquirir <strong>“LA VIVIENDA”</strong> descrita en el párrafo
+                            inicial del mismo, descripción que se tiene aquí por reproducida como si a la letra se insertase,
+                            y que se presenta de acuerdo con el artículo 1804 y demás relativos aplicables del Código Civil
+                            Federal y sus artículos correlativos en el interior de la República.
+                        </p>
+                        <p>
+                            <strong class="clausula">SEGUNDO.</strong> Manifiesto conocer la condición física y material del
+                            lote de terreno objeto de la presente y que he visitado el mismo, tomando conocimiento del mismo,
+                            así como de sus condiciones topográficas, climatológicas, de ubicación, comunicación y demás
+                            particularidades. Asimismo, manifiesto que estoy de acuerdo con el ante-proyecto y especificaciones
+                            de construcción de <strong>LA VIVIENDA</strong> y por tanto es mi voluntad adquirirla a través de
+                            los documentos definitivos que correspondan.
+                        </p>
+                        <p>
+                            <strong class="clausula">TERCERO.</strong>  El precio total que se ofrece para la compra de
+                            <strong>“LA VIVIENDA”</strong> motivo de <strong>“LA OFERTA”</strong> es la cantidad que se detalla en la solicitud de compra, misma que forma parte integrante de la carátula de la presente.
+                        </p>
+                        <p>
+                            Con el objeto de garantizar la <strong>“LA OFERTA”</strong>, por este conducto me obligo a las condiciones que me refiero en la solicitud de compra, como cantidades que entrego y me comprometo a entregar por concepto de depósito en garantía, con motivo de la presente carta oferta unitlateral, hasta el día en que se me notifique que estaré en la posibilidad de escriturar la <strong>VIVIENDA</strong>.
+                        </p>
+                        <p>
+                            Todas las entregas de dinero descritas conforme a la Solicitud, se harán al <strong>DESARROLLADOR</strong> desde cuentas a mi nombre exclusivamente, mediante transferencia bancaria, cheque o depósito en la cuenta que para tal efecto se me indique, sin superar en efectivo el monto que aplique la ley federal para la prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita vigente a la firma del presente o en su domicilio ubicado en: Avenida Antea 1088, piso 1-A, Jurica, Municipio de Querétaro, Estado de Querétaro. 
+                            Me comprometo en todo momento a cumplir con lo dispuesto en la Ley Federal para la prevención e identificación de operaciones con recursos de procedencia ilícita, así como con cualquier disposición aplicable para estar en posibilidad de adquirir la VIVIENDA, por lo que me hago sabedor de mi obligación para identificar ante el DESARROLLADOR todos los depósitos y entrega de cantidades hechas por concepto de garantizar la adquisición de la VIVIENDA y éstos deberán ser en todo momento procedentes de cuentas a mi cargo y nombre, estando de acuerdo en que el DESARROLLADOR podrá desconocer cualquier cantidad depositada que no haya sido identificada por mi parte.
+                        </p>
+                        <p>
+                            Las cantidades de dinero antes descritas las entregaré a Ustedes como representantes del Desarrollo Inmobiliario  en calidad de 
+                            Depósito en Garantía relacionado con <strong>“LA OFERTA”</strong> solicitándoles
+                            tenerlas en custodia hasta en tanto resuelven respecto de la aceptación o rechazo de
+                            <strong>“LA OFERTA”</strong>. En caso de ser aceptada <strong>“LA OFERTA”</strong>, y
+                            formalizada la operación de compraventa, las sumas de dinero recibidas por Ustedes como
+                            Depósito en Garantía, debidamente notificadas e identificadas de cuentas procedentes a mi nombre, 
+                            deberán estar cubiertas 72 horas antes de la celebración del contrato
+                            de compraventa. En caso de que <strong>“LA OFERTA”</strong> no fuere aceptada por ustedes dentro
+                            del plazo previsto o si la misma quedare sin efectos de conformidad a lo establecido en el apartado
+                            Quinto siguiente, me deberá ser devuelta la cantidad que corresponda dentro de los 60 (sesenta)
+                            días naturales siguientes a la solicitud que entregue por escrito debidamente fundada para la devolución.
+                        </p>
+                        <p>
+                            En el precio ofrecido por el suscrito Oferente no se incluyen los gastos que se llegasen a generar
+                            por concepto de escrituración, de crédito directo o bancario, en su caso, hipoteca o administrativos
+                            relacionados con trámites de crédito o similares, por lo que serán de mi exclusiva cuenta tales
+                            gastos, obligándome a pagarlos en el momento que se me requieran.
+                        </p>
+                        <p>
+                            De la misma manera, por éste conducto instruyo a <strong>DESARROLLADOR</strong>
+                            para que lleve a cabo todos los actos materiales y jurídicos necesarios para construir
+                            <strong>“LA VIVIENDA”</strong> en términos generales conforme a las especificaciones contenidas en el anteproyecto y demás documentos que acompañan a la presente como <strong>ANEXO 1</strong>.
+                        </p>
+                        <p>
+                            <strong class="clausula">CUARTO.</strong> Manifiesto, bajo protesta de decir verdad, que los
+                            recursos monetarios con los cuales garantizo el cumplimiento de <strong>“LA OFERTA”</strong>
+                            son recursos de procedencia lícita.
+                        </p>
+                        <p>
+                            <strong class="clausula">QUINTO.</strong> Las condiciones bajo las cuales quedará sujeta
+                            <strong>“LA OFERTA”</strong>, además de las ya mencionadas, serán las siguientes:
+                            <ol>
+                               -<li>
+                                   5.1 El plazo en el que <strong>DESARROLLADOR</strong> me deberá de
+                                    informar de la aceptación o rechazo de <strong>“LA OFERTA”</strong> es de máximo
+                                    24 (veinticuatro) meses calendario siguientes a la fecha de <strong>LA OFERTA</strong>. En el entendido de que, si en el plazo mencionado el  <strong>DESARROLLADOR </strong> no acepta por escrito  <strong>LA OFERTA </strong>, o si  <strong>LA OFERTA </strong> fuese rechazada, el  <strong>DESARROLLADOR </strong> deberá reembolsarme las cantidades de dinero que hubiese entregado como Depósito en Garantía, en un plazo no mayor a 60 (sesenta) días naturales a partir de la solicitud de reembolso que por escrito les realizaré.
+                                </li>
+                                <li>
+                                    5.2 Para que esta <strong>“OFERTA”</strong> se entienda que fue aceptada por
+                                    <strong>DESARROLLADOR</strong> deberá notificarse en el domicilio
+                                    señalado por escrito y en forma expresa por conducto de alguno de los apoderados legales
+                                    que corresponda.
+                                </li>
+                                <li>
+                                    5.3 En caso de que reciba del <strong>DESARROLLADOR</strong> la comunicación escrita de que <strong>LA OFERTA</strong> ha sido aceptada, las cantidades de dinero entregadas como Depósito en Garantía deberán ser aplicadas formalmente a cuenta del precio ofrecido mediante la celebración del contrato de compraventa correspondiente en los términos y condiciones que convengan para ambas partes.
+                                </li>
+                                <li>
+                                    <p>
+                                        5.4 Esta <strong>“OFERTA”</strong> es irrevocable y por tanto no podré desligarme de la
+                                        misma, y en caso de que insistiere en hacerlo tácita o expresamente, a título de pena
+                                        convencional y gastos administrativos acepto pagarle al
+                                        <strong>DESARROLLADOR</strong> el equivalente a
+                                        $50,000.00 (CINCUENTA MIL PESOS 00/100 M.N.), aclarando que la pena
+                                        antes referida no se aplicará en caso de que el suscrito Oferente, habiendo realizado
+                                        todas y cada una de las acciones necesarias
+                                    </p>
+                                   
+                                </li>
+                            </ol>
+                        </p>
+                    </div>
+                    
+                    
+                    <div class="right-col">
+                        <p>
+                             
+                           <Br /><Br /><Br /><Br />
+                        
+                        
+                            <ol>
+                                -<li>
+                                     no fuere sujeto de crédito a juicio de la institución de
+                                        crédito que en su caso se hubiere elegido para la gestión y obtención de financiamiento.<Br />
+                                    5.5 La posesión de <strong>“LA VIVIENDA”</strong> no me será entregada mientras no se cumplan en
+                                    su totalidad las siguientes condiciones: (i) que <strong>“LA OFERTA”</strong> se acepte por
+                                    parte de <strong>DESARROLLADOR</strong>; (ii) que se firme el
+                                    respectivo contrato de compraventa respecto de <strong>“LA VIVIENDA”</strong>; (iii) que
+                                    el suscrito haya pagado el precio de <strong>“LA VIVIENDA”</strong> en su totalidad.
+                                    <p>
+                                        Una vez que <strong>“LA OFERTA”</strong> sea aceptada por
+                                        <strong>DESARROLLADOR</strong> éste me hará entrega de una orden de
+                                        escrituración, haciéndome responsable de acudir ante el Notario que designe
+                                        <strong>DESARROLLADOR</strong> para que este realice todos los
+                                        trámites necesarios para formalizar la transmisión y Escrituración de la misma vivienda.
+                                    </p>
+                                </li>
+                                <li>
+                                    5.6 Se entenderá que me desligo expresa o tácitamente de <strong>“LA OFERTA”</strong> y en
+                                    consecuencia quedará sin efectos con la obligación de pago de la pena convencional conforme al inciso 5.4 anterior, en los siguientes supuestos:
+                                    <ol class="lower-roman">
+                                        <li>
+                                            Si no entrego todas las cantidades correspondientes al depósito en garantía la
+                                            forma y términos que se establecen en el apartado Tercero de
+                                            <strong>“LA OFERTA”</strong>; y/o
+                                        </li>
+                                        <li>
+                                            Si no entrego en los tiempos que me sean requeridos en su momento por
+                                            <strong>DESARROLLADOR</strong>, la documentación necesaria
+                                            para la tramitación de crédito con alguna institución financiera para la obtención
+                                            de financiamiento; y/o
+                                        </li>
+                                        <li>
+                                            Si no comparezco a la firma del contrato de compraventa correspondiente a
+                                            <strong>“LA VIVIENDA”</strong> o a la firma de la escritura pública correspondiente
+                                            en el plazo que <strong>DESARROLLADOR</strong> señale para
+                                            ello; y/o
+                                        </li>
+                                        <li>
+                                            Si la información que proporciono fuera falsa, incorrecta o no comprobable para
+                                            <strong>DESARROLLADOR</strong>.
+                                        </li>
+                                    </ol>
+                                    En cualquiera de los supuestos antes indicados
+                                    <strong>DESARROLLADOR</strong> deberá comunicarme fehacientemente
+                                    que no fue aceptada <strong>LA OFERTA</strong> o que la misma ha quedado sin efectos,
+                                    aplicándose lo dispuesto en el inciso 5.4 de este mismo apartado Quinto, por lo que
+                                    <strong>DESARROLLADOR</strong> está autorizado para aplicar y
+                                    retener para sí la cantidad establecida como pena convencional ahí referida deduciéndola
+                                    de las sumas de dinero entregadas como depósito en garantía y el remanente deberá
+                                    entregarlo al suscrito en los 60 (sesenta) días naturales siguientes a la fecha de la
+                                    notificación respectiva, dejando sin efecto alguno a la presente Oferta. 
+                                </li>
+                                <li>
+                                    5.7 Entiendo que sin el consentimiento de <strong>DESARROLLADOR</strong>
+                                    no podré ceder ningún tipo de derecho que me pudiera derivar de <strong>LA OFERTA</strong>
+                                    o de su aceptación, ni modificar la ubicación del inmueble que ofrezco adquirir, obligándome
+                                    a suscribir en su momento el correspondiente Contrato de Compra-Venta ante escritura pública.
+                                </li>
+                                <li>
+                                    5.8 Para el supuesto que fuese aceptada <strong>LA OFERTA</strong>, manifiesto mi
+                                    conocimiento y expresa conformidad sobre las normas de usos, lineamientos y restricciones
+                                    de construcción del Condominio en donde se ubica <strong>LA VIVIENDA</strong>, así como con las disposiciones 
+                                    derivadas del Reglamento Interno del Condominio correspondiente a “{!desarrollo.Nombre_largo__c}”, Reglamento 
+                                    de Diseño y Construcción y de los demás Reglamentos emitidos por las Autoridades Gubernamentales 
+                                    correspondientes, las cuales me obligo desde ahora a cumplir y respetar en todos sus términos.
+                                </li>
+                            </ol>
+                        </p>
+                        <p>
+                            <strong class="clausula">SEXTO.</strong> En el contrato de compraventa o escritura pública que se
+                            llegue a celebrar se deberá estipular que <strong>“LA VIVIENDA”</strong> quedará sujeta a los
+                            Planes de Desarrollo Urbano y a las declaraciones de usos y destinos que dicten las autoridades
+                            administrativas con base en la legislación aplicable.
+                        </p>
+                        <p>
+                            <strong class="clausula">SÉPTIMO.</strong> El presente documento constituye una declaración
+                            unilateral de la voluntad única y exclusivamente con el objeto de que se considere mi intención
+                            de adquirir un lote, una vez que el <strong>DESARROLLADOR</strong> cuente con las autorizaciones administrativas correspondientes.
+                        </p>
+                        <p>
+                            <strong class="clausula">OCTAVO.</strong> Manifiesto conocer que los honorarios, gastos, impuestos
+                            y derechos que se originen con motivo de la celebración de la compraventa serán cubiertos por quien
+                            suscribe la presente carta intención (incluyendo el IVA sobre la construcción, en caso de que
+                            llegase a aplicar) salvo el impuesto sobre la renta que será invariablemente a cargo de la
+                            enajenante.
+                        </p>
+                        <p>
+                            <p>
+                                <strong class="clausula">NOVENO.</strong> La entrega de documentación y notificaciones que
+                                con la presente se relacionen, nos deberá ser efectuada en el domicilio señalado en la Solicitud de compra, que forma parte integrante de la presente.
+                                 
+                                </p>
+                        </p>
+                        <p>
+                            El suscrito <strong>OFERENTE</strong>, manifiesto a
+                            <strong>DESARROLLADOR</strong> que renuncio expresamente al fuero que por razón del domicilio presente o futuro pudiera corresponderme y estoy de acuerdo en someterme expresamente a las leyes y a la jurisdicción de los tribunales competentes de la Ciudad de Querétaro, Estado de Querétaro, para cualquier controversia que se suscite en la interpretación de la presente <strong>OFERTA</strong>.
+                        </p>
+                        <p style="text-align: center;">
+                            <br />   <br /> <br />
+                            <strong>ATENTAMENTE</strong>
+                            <br />  <br />  <br />
+                            <br />
+                            <br />
+                            ______________________________________
+                            <br />
+                            <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                            )}">
+                                <strong>{!cotizacion.Contact.Name}</strong>
+                                <br />
+                            </apex:outputPanel>
+                            <strong>{!oportunidad.Account.Name}</strong>
+                            <br />
+                            (ANEXO COPIA DE IDENTIFICACIÓN OFICIAL)
+                        </p>
+                        <br />
+                        <br />
+                        <p>
+                           Recibimos la presente OFERTA para su estudio y proposición al DESARROLLADOR con apego en lo dispuesto en el Fideicomiso antes descrito, en el entendido de que una vez analizada la misma se procederá a notificarles posteriormente la aceptación de la misma.
+                        </p>
+                        <br />
+                        
+                        <br />
+                        <p>
+                           Recibido Por: <strong>{!desarrollo.Razon_social_fiscal__c}</strong>
+                        </p>
+                        <p style="text-align: left;">
+                            <br /><br /><br />
+                            <br />
+                            <br />
+                            ______________________________________
+                            <br />
+                           Nombre y firma
+                        </p>
+                        <Br />
+                        <p>
+                            Querétaro, Qro. a {!hoy}.
+                        </p>
+                    </div>
+                    <div style="clear: both;">
+                    </div>
+                </div>
+                <!-- FIN CLÁUSULAS  -->
+ 
+              
+ </apex:outputPanel>
+
+<!--  DUEÑO BENEFICIARIO __________________________________________________________________________ -->
+
+            <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name != '')}">
+
+              <div id="anexo-1" style="text-align: left;" class="new-doc">
+                    <h2><strong>{!desarrollo.Razon_social_fiscal__c}</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constancia de Dueño Beneficiario.</h2>
+                    <h1>P R E S E N T E ,-</h1>
+                    <table  class="detailTable" style="estilo1;">
+                    <br />
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En relación con la solicitud respecto de la información sobre el conocimiento de la
+                            existencia de <strong> DUEÑO BENEFICIARIO</strong> y/o BENEFICIARIO CONTROLADOR, y en su caso sobre
+                            los datos, documentos o información que permita identificarlo y/o identificarlos, en términos del
+                            Artículo 3 fracción III de la Ley Federal para la Prevención e Identificación de Operaciones con
+                            Recursos de Procedencia Ilícita que lo define como:
+                        </span></p>
+                    <br/>
+
+                    <br /><br />
+
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">Artículo 3. Para los efectos de esta Ley, se entenderá por:  </span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">“…III.- Beneficiario Controlador, a la persona o grupo de personas que:</span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">a)Por medio de otra o de cualquier acto, obtiene el beneficio derivado de éstos y es quien, en última instancia,
+                            ejerce los derechos de uso, goce, disfrute, aprovechamiento o disposición de un bien o servicio, o </span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">b)Ejerce el control de aquella persona moral que, en carácter de cliente o usuario, lleve a cabo actos u
+                            operaciones con quien realice Actividades Vulnerables, así como las personas por cuenta de quienes celebra alguno de ellos.</span></I></p>
+
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">Se entiende que una persona o grupo de personas controla a una persona moral cuando, a través de la
+                             titularidad de valores, por contrato o de cualquier otro acto, puede:</span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">i)Imponer, directa o indirectamente, decisiones en las asambleas generales de accionistas, socios u órganos
+                            equivalentes, o nombrar o destituir a la mayoría de los consejeros, administradores o sus equivalentes;</span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">ii) Mantener la titularidad de los derechos que permitan, directa o indirectamente, ejercer el voto respecto de
+                            más del cincuenta por ciento del capital social, o </span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">iii)Dirigir, directa o indirectamente, la administración, la estrategia o las principales políticas de la misma…”</span></I></p>
+
+                            <br /><br /><br />
+
+
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BAJO PROTESTA DE DECIR VERDAD y conociendo las penas que incurren quienes
+                           declaran falsamente ante personas Obligadas que realizan Actos u Operaciones Vulnerables y enterado del contenido del artículo 62 de la citada Ley, le hago saber:
+                        </span></p>
+                    <br/> <br /> <br/> <br /> <br/> <br />
+
+
+                    <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="polig"></div> </TD>      <TD><P ><span style=" font-size: 12pt;">NO TENGO CONOCIMIENTO</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="polig"></div> </TD>      <TD><P ><span style=" font-size: 12pt;">SI TENGO CONOCIMIENTO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                    <br/> <br /> <br/> <br /> <br/> <br />
+                    <br />
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de la existencia de un <strong> DUEÑO BENEFICIARIO</strong> y/o <strong>BENEFICIARIO CONTROLADOR.</strong> En
+                           caso de tener una respuesta afirmativa “me obligo” a presentar los documentos correspondientes
+                           como lo solicita el artículo 22 de las Reglas de Carácter General de la Ley Federal para la
+                           Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita.
+                        </span></p>
+                         <P ALIGN="justify"><I><span style=" font-size: 10pt;">(…"Cuando quien
+                               realiza una Actividad Vulnerable cuente con información basada en indicios o hechos acerca de que alguno de
+                                sus Clientes o Usuarios actúa por cuenta de otra persona.. deberá solicitar al Cliente o Usuario de que se
+                                trate, información que le permita identificar al Dueño Beneficiario, sin perjuicio de los deberes de
+                                confidencialidad frente a terceras personas que dicho Cliente o Usuario haya asumido por vía convencional" ).</span></I></p>
+                        <br/> <br/> <br /> <br/> <br /> <br/> <br />
+
+
+                        <table align="center" border="0"  width="100%" cellpadding="0" cellspacing="0" style="text-align: center;">
+                           <tr>
+                            <td>___________________________________________</td>
+                            <td>___________________________________________</td>
+                            <td>___________________________________________</td>
+                           </tr>
+
+                           <tr>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Nombre</span></I></p></td>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Firma</span></I></p></td>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Fecha</span></I></p></td>
+                           </tr>
+                    </table>
+                   </table>
+                </div>
+           </apex:outputPanel>
+<!-- persona fisica __________________________________________________________________________ -->
+     <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name == 'Persona Fisica')}">
+          <P ALIGN="center"><I><span style=" font-size: 8pt;">Ficha de identificación pf mexicana/ o extranjera con condiciones residentes temporales o permanentes en el pais</span></I></p>
+          <P ALIGN="right"><apex:outputText value="{0, date, MMMM d','  yyyy}"> Fecha generacion de Boletín:  <apex:param value="{!TODAY()}" /> </apex:outputText></p>
+          <P ALIGN="center">  <apex:image value="{!$Resource.Pf}" /></p>
+             <br/><br/><br/>
+
+          <P><span style=" font-size: 10pt;"><strong>Cliente</strong></span></p>
+            <P><I><span style=" font-size: 9pt;">Usted, ¿Actúa por su cuenta?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">¿Viene por encargo de Alguien?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">En relación al articulo 3 fracción III de la LFPIORPI, ¿en esta operación existe o reconoce un Dueño beneficiario o Beneficiario controlador?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                      <p style="text-align: center; margin: 40px 0 20px 0; font-size: 8pt;">
+                        ______________________________________
+                        <br />
+                        <apex:outputPanel rendered="{!AND(
+                                            oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                        )}">
+                            <strong>{!cotizacion.Contact.Name}</strong>
+                            <br />
+                        </apex:outputPanel>
+                        <strong>{!oportunidad.Account.Name}</strong>
+                        <br />
+                    </p>
+
+</apex:outputPanel>
+
+<!-- persona moral __________________________________________________________________________  -->
+    <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name == 'Persona Moral')}"> <br/>
+     <P ALIGN="right"><span style=" font-size: 14pt;">FICHA DE IDENTIFICACIÓN</span></p>
+     <P ALIGN="right"><apex:outputText value="{0, date, MMMM d','  yyyy}"> Fecha generacion de Boletín:  <apex:param value="{!TODAY()}" /> </apex:outputText></p>
+     <P ALIGN="center">  <apex:image value="{!$Resource.Pm}" /></p>
+         <P><I><span style=" font-size: 9pt;">Usted, ¿Actúa por su cuenta?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">¿Viene por encargo de Alguien?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">En relación al articulo 3 fracción III de la LFPIORPI, ¿en esta operación existe o reconoce un Dueño beneficiario o Beneficiario controlador?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                      <p style="text-align: center; margin: 50px 0 20px 0; font-size: 8pt;">
+                        ______________________________________
+                        <br />
+                        <apex:outputPanel rendered="{!AND(
+                                            oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                        )}">
+                            <strong>{!cotizacion.Contact.Name}</strong>
+                            <br />
+                        </apex:outputPanel>
+                        <strong>{!oportunidad.Account.Name}</strong>
+
+                    </p>
+
+</apex:outputPanel>
+<div id="anexo-1" style="text-align: left;" class="new-doc"></div>
+
+ <!-- Aviso de privacidad __________________________________________________________________________  -->
+  <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name != '')}">
+     <P ALIGN="center"><span style=" font-size: 8pt;"><strong>AVISO DE PRIVACIDAD</strong></span></p>
+     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><P ALIGN="center"><span style=" font-size: 8pt;"><strong></strong></span></p>
+
+     <div id="aviso de priv" style=" font-size: 7pt;">
+                    <div  class="left-col">
+
+                        <p>
+                           De conformidad en lo dispuesto por la Ley Federal de Protección de Datos
+                           Personales en Posesión de Particulares, se emite el presente Aviso de
+                           Privacidad en los siguientes términos:
+                        </p>
+                        <br />
+                        <p>
+                            <strong>IDENTIDAD Y DOMICILIO DEL RESPONSABLE DE LOS DATOS PERSONALES:</strong>
+                            Para efectos del presente Aviso de Privacidad, {!desarrollo.Razon_social_fiscal__c},
+                             y sus empresas afiliadas y subsidiarias (en adelante el “EL
+                            RESPONSABLE”), señalan como encargado de la obtención, divulgación,
+                            almacenamiento, uso, incluido acción de acceso, manejo, aprovechamiento,
+                            transferencia o disposición de datos personales (en adelante el “Tratamiento”)
+                            al Encargado del departamento de Protección de Datos Personales Jessica
+                            Mariana Sánchez Jarquín, designado por EL RESPONSABLE, (en lo sucesivo el
+                            “ENCARGADO”), con domicilio en Avenida Antea 1088, Jurica, C.P. 76100
+                            Querétaro, Qro.
+                        </p>
+                        <br />
+                       <p>
+                            <strong>INFORMACIÓN A RECABAR Y FINALIDADES DEL TRATAMIENTO DE DATOS
+                            PERSONALES:</strong>
+                           Le informamos que EL RESPONSABLE podrá recopilar su
+                           información a través de diferentes fuentes, ya sea Personal y/o Directamente
+                           proporcionados por el Titular o Indirectamente por cualquier otra fuente de
+                           información comercialmente disponibles o que sean permitidas por la Ley. La
+                           colecta y Tratamiento de datos personales del Titular, incluyendo los datos
+                           personales sensibles que en su caso lleguemos a recabar, y salvo que el Titular
+                           disponga lo contrario mediante el medio descrito en el presente Aviso de
+                           Privacidad, tiene como finalidad, la evaluación de solicitudes de empleo,
+                           contratación de empleados, evaluación de contratistas, propuestas y
+                           contratación con proveedores de servicios y productos, elaboración y manejo
+                           de contratos comerciales, procesos de pago, así como para el cumplimiento con
+                           nuestras obligaciones laborales, administrativas, comerciales y fiscales
+                           establecimiento de bases de datos de proveedores, desarrollo de nuevos
+                           productos y servicios, asesoría, comercialización, promoción, contratación y
+                           colocación de todo tipo de servicios y productos y/o mejora de nuestros
+                           productos y servicios y otras obligaciones derivadas de cualquier relación
+                           jurídica entre el titular de datos personales y EL RESPONSABLE o las empresas
+                           afiliadas y subsidiarias de EL RESPONSABLE. Sus datos personales, también
+                           podrán tener, entre otras, las siguientes finalidades: (i) Atender requerimientos
+                           legales de autoridades competentes; (ii) Hacer de su conocimiento, la gama de
+                           nuevos productos y servicios, así como beneficios, descuentos, promociones,
+                           estudios de mercado, promociones, notificaciones sobre cambio en
+                           condiciones y en general toda la publicidad derivada de los productos y
+                           servicios que ofrece EL RESPONSABLE y/o las empresas afiliadas y subsidiarias
+                           de EL RESPONSABLE; (iii) Análisis y desarrollo de productos y de proveedores
+                           así como el uso de nuestros productos y servicios; y (iv) Para el cumplimiento
+                           de nuestros términos y condiciones con relación a nuestras obligaciones,
+                           convenios, contratos, así como para el desarrollo de productos, venta de
+                           productos o la prestación de nuestros servicios; y (v) en su caso, para el uso de
+                           nuestras áreas de recursos humanos y compras, de conformidad a las políticas
+                           de estas últimas.<strong>*Los datos sensibles que se pudieran recabar podrán ser
+                           utilizados para el mejor cumplimiento de nuestros objetivos legales, fiscales o
+                           comerciales.</strong>
+                        </p>
+                        <br />
+                         <p>
+                            <strong>OPCIONES Y MEDIOS QUE EL RESPONSABLE, OFRECE A LOS TITULARES DE
+                            DATOS PERSONALES PARA LIMITAR EL USO O DIVULGACIÓN DE SU
+                            INFORMACIÓN:</strong>
+                            Los datos personales del titular, serán mantenidos en estricta
+                            confidencialidad, de conformidad con las medidas de seguridad,
+                            administrativas, técnicas y físicas que al efecto EL RESPONSABLE ha
+                            implementado y las que en el futuro implemente en sus políticas y
+                            procedimientos de seguridad, quedando prohibido su divulgación ilícita y
+                            limitando su uso a terceros, conforme a lo previsto en el presente Aviso de
+                            Privacidad.
+                        </p>
+                         <br />
+                         <p>
+                            <strong>MEDIOS PARA EL EJERCICIO DE DERECHOS DEL TITULAR:</strong>
+                            El titular de datos
+                            personales, podrá ejercer sus derechos de acceso, rectificación, cancelación,
+                            posición, limitación de uso, divulgación o revocación, mediante solicitud por
+                            escrito enviada vía correo postal o correo electrónico dirigidos a:
+                        </p>
+                         <br />
+                         <p>
+                            <strong>Por correo postal o mensajería privada:</strong>
+                            Jessica Mariana Sánchez Jarquín como representante de EL RESPONSABLE al
+                            siguiente domicilio: Avenida Antea 1088, Jurica, C.P. 76100 Querétaro, Qro.
+                            
+                        </p>
+                        <br />
+                         <p>
+                            <strong>Por correo electrónico a:</strong>
+                            atencionaclientes@vialli.mx
+                        </p>
+                        <br />
+
+
+                    </div>
+
+
+                    <div class="right-col">
+                    <p>
+                            Mediante solicitud por escrito que contenga la siguiente información: (i) El
+                            nombre completo del titular de los datos personales, domicilio y cuenta de
+                            correo electrónico, para poder comunicarle la respuesta a su solicitud; (ii) Los
+                            documentos que acrediten la identidad y en su caso la representación legal del
+                            titular de los datos personales; (iii) La descripción clara y precisa de los datos
+                            personales respecto de los que se busca ejercer alguno de los derechos antes
+                            mencionados; (iv) Cualquier otro elemento o documento que facilite la
+                            localización de los datos personales; y
+                            (v) En el caso de solicitudes de rectificación de datos personales, el titular,
+                            deberá indicar, las modificaciones a realizarse y aportar la documentación que
+                            sustente su petición.
+                        </p>
+                      <p>
+                            <strong>TRANSFERENCIA DE DATOS PERSONALES.</strong>
+                            EL RESPONSABLE podrá realizar la transferencia de datos a: (i) Las empresas
+                            afiliadas y subsidiarias de EL RESPONSABLE y la compañía a nivel internacional;
+                            (ii) Terceros proveedores de servicios para el cumplimiento de las obligaciones
+                            legales adquiridas por EL RESPONSABLE o por cualquiera de las empresas
+                            afiliadas y subsidiarias de EL RESPONSABLE; (iii) Terceros proveedores de
+                            servicios de investigación, análisis de datos, envío de información enfocada a
+                            las necesidades del titular de datos personales, así como en la realización de
+                            otros servicios financieros necesarios
+                            o requeridos por el titular de datos personales; (iv) Socios comerciales con los
+                            que EL RESPONSABLE o cualquiera de las empresas de EL RESPONSABLE, lleve
+                            a cabo convenios o contratos enfocados al desarrollo de nuevos productos y/o
+                            servicios enfocados al mejoramiento y de acuerdo a sus necesidades e
+                            investigación; (v) Terceros derivado de un reestructura corporativa,
+                            incluyendo, la fusión, consolidación, venta, liquidación o transferencia de
+                            activos; y (vi) Otras transmisiones previstas en la Ley citada y su Reglamento.
+                        </p>
+                        <br />
+                         <p>
+                            <strong>*Los terceros y las entidades receptores de datos personales, asumen las
+                            mismas obligaciones y/o responsabilidades de EL RESPONSABLE, de
+                            conformidad con lo descrito en el presente Aviso de Privacidad.</strong>
+                         </p>
+                         <p>
+                            <strong>*El titular de datos personales que presenta cualquier solicitud para entablar
+                            una relación jurídica con EL RESPONSABLE o por cualquiera de las empresas
+                            de EL RESPONSABLE, acepta la transferencia de sus datos personales, en los
+                            términos descritos en el presente Aviso de Privacidad.</strong>
+                         </p>
+                         <br />
+                         <p>
+                         <strong>CAMBIOS AL AVISO DE PRIVACIDAD:</strong>
+                           Cualquier cambio al presente aviso de
+                           privacidad, le será informado a través de cualquiera de los siguientes medios:
+                           (i) Avisos en las plantas de EL RESPONSABLE; y (ii) Cualquier otro medio de
+                           comunicación público o privado previstos en los contratos que amparan las
+                           operaciones celebradas entre EL RESPONSABLE o por cualquiera de las
+                           empresas de EL RESPONSABLE;
+                        </p>
+                        <br />
+                         <p>
+                           El Encargado será en todo tiempo designado por el representante legal de la
+                           empresa {!desarrollo.Razon_social_fiscal__c}.
+                        </p>
+                       <br />
+                         <p>
+                         <strong>ACUSE DE RECIBO DE AVISO DE PRIVACIDAD</strong>
+                         </p>
+                       <br />
+                         <p>
+                         <strong>AL FIRMAR ESTE DOCUMENTO USTED ACEPTA HABER RECIBIDO UNA COPIA
+                         DEL AVISO DE PRIVACIDAD DE VIVE U-CALLI INMOBILIARIA, SAPI DE CV, EL
+                         CUAL DESCRIBE CÓMO UTILIZAMOS Y DIVULGAMOS SU INFORMACIÓN.
+                         USTED TIENE DERECHO DE REHUSARSE A FIRMAR ESTE ACUSE DE RECIBO, EN
+                         CUYO CASO DEBEREMOS DOCUMENTAR NUESTRO ESFUERZO DE BUENA FE
+                         POR OBTENER SU ACUSE DE RECIBO Y LA RAZÓN POR LA CUAL NO LO
+                         OBTUVIMOS.</strong>
+                         </p>
+                        <br /><br /><br />
+                        <p>______________________________</p>
+                         <p><br />
+                         <strong>NOMBRE</strong>
+                         </p>
+                         <br /><br /><br />
+                         <p>______________________________</p>
+                         <p><br />
+                         <strong>FECHA</strong>
+                         </p>
+                         <br /><br /><br />
+                         <p>______________________________</p>
+                         <p><br />
+                         <strong>FIRMA</strong>
+                         </p>
+
+
+                    </div>
+                    <div style="clear: both;">
+                    </div>
+                </div>
+
+
+ </apex:outputPanel>
+ <!-- memorias descrip _________________________________________________________________________________  -->
+ <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cedro')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cedro RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+   
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Maple')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+        <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Maple RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nogal')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nogal RG')}">
+      <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+ 
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo RG1')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo RG2')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+ 
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Encino')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIII4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Laurel')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+ <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Roble Golf')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Sauce')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cerezo')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Laurel S4')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Tabachin S4')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+ 
+ 
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'A INT')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DLL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DLL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DLL3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Caliza RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB1C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB2C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB3C}" width="780" height="940" /></p>
+   </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cantera TPB')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB21CA}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB22CA}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB23CA}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Porfido')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB1P}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB2P}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB3P}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cabernet')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3C}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nebbiolo')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Merlot')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Malbec RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1MRG}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Malbec')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D2}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Zinfandel RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR1Z}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR2Z}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR3Z}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acuarela RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3A}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acuarela_RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3A}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'NOGAL NEO')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'NOGAL URBANO')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>  
+    
+        <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acacia')}">
+      <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_3}" width="780" height="940" /></p>   <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_4}" width="780" height="940" /></p>
+    </apex:outputPanel> 
+           
+    <div id="anexo-1" style="text-align: left;" class="new-doc"></div>       
+        <div class="header">
+         <br /><br /><br />
+                    <table style="width: 100%;height: 20%;" >
+                    <tr>
+                        <td style="text-align: right;" >
+                        <apex:image width="25%" height="25%" id="logoVialli" value="{!$Resource.logo}" />                        
+                        </td>                
+                    </tr> 
+                     <tr>
+                        <td style="text-align: LEFT;  font-size: 8pt;" >  
+                          Estimado Oferente,
+                           <br /><br />
+                        </td>                
+                    </tr> 
+                      <tr>
+                        <td style="text-align: justify ;  font-size: 10px; font: Calibri ;" >  
+                            En primer término, queremos agradecer su preferencia y confianza por externar su deseo de compra de una vivienda ubicada en el Desarrollo <strong>“{!desarrollo.Nombre_largo__c}”</strong>, por lo que extendemos la intención del grupo empresarial que representamos Grupo Inmobiliario Vialli (el “Desarrollador”), para otorgar nuestro mejor servicio y seguridad a la operación que pretende realizar con nosotros, y con el objetivo de ofrecer un proceso transparente para llevar a cabo la compra-venta de una vivienda, será nuestro compromiso asesorarlo y acompañarlo para que de una manera profesional logre recibir una casa en las mejores condiciones y con el máximo de comodidades, sujeto a la previa aceptación de su Oferta de Compra.
+                            <br /><br />
+                            Con el objetivo de ofrecer un proceso transparente, de claro de asesoramiento y finalmente de compra-venta de una vivienda, es muy importante que esté enterado y de acuerdo con la información que se presenta a continuación:
+                        </td>                
+                    </tr> 
+                </table>
+            </div>  
+     <P ALIGN="center"> 
+      <br /><br /><br /><br /><br /><br />     
+      <br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br /><br /><br />
+      
+      <!-- cARTA OFERTA DEMANDA RECURSOS ESTATICOS UTILIADAOS __________________________________________________________________________  --> 
+     <apex:image value="{!$Resource.u_Consideraciones_A1}" width="820" /></p> 
+     
+     
+   <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != '')}">    
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A2}" width="800" height="945" /></p>
+  </apex:outputPanel>
+   
+     
+      <!-- SI DESSARROLLO ES DIFERENTE DE SAMARE REDNDER LA SEGUNDA HOJA QUE PERTENECE A CUALQUIER DESARROLLO _________________________-->
+  <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != 'Samare III')}">
+   <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != 'Samare IV')}">     
+       <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A3}" width="800" height="945" /></p>
+       <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A4}" width="785" height="945" /></p>
+     </apex:outputPanel>
+  </apex:outputPanel> 
+    
+     
+
+<!-- SI DESSARROLLO ES IGUAL IGUAL A SAMARE REDNDER LA SEGUNDA Y TERCERA HOJA QUE PERTENECE A sAMARE _______________________-->
+     
+    <apex:outputPanel rendered="{!OR(desarrollo.Nombre_largo__c == 'Samare III',desarrollo.Nombre_largo__c == 'Samare IV' )}">    
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A3_Sam}" width="785" height="945" /></p>
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A4_Sam}" width="785" height="945" /></p>
+    </apex:outputPanel> 
+
+
+
+
+
+
+
+   </apex:form>
+  </body>
+ </html>
+</apex:page>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 abril respaldo anterior Cou
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<apex:page standardController="Quote" extensions="CotizacionPDFController" renderAs="PDF" standardStylesheets="false" applyHtmlTag="false" showHeader="false" sidebar="false" docType="html-5.0">
+<html>
+    <head>
+        <style>
+            @page {
+                @top-center {
+                    content: element(header);
+                }
+
+                margin-top: 1.00cm;
+                margin-bottom: 1.50cm;
+            }
+            div.header {
+                padding: 10px;
+                position: running(header);
+            }
+            body {
+                font-size: 6.0pt;
+                font-family: sans-serif;
+            }
+             .estilo1 {
+            font-size: 16.0pt;
+            font-family: sans-serif;
+           }
+            .detailTable{
+                width: 100%;
+            }
+            .detailTable td, .detailTable th {
+                width: 50%;
+            }
+            .quoteLineTable{
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .headerTable{
+                background-color: #ADB1B4;
+                color: white;
+            }
+            .detailrowTable{
+                border-right: 1px solid #D9D9D9 ;
+                background-color: #FBFBFB;
+            }
+            .detailrowlastTable{
+                background-color: #FBFBFB;
+            }
+            .new-doc {
+                page-break-after: always;
+                text-align: justify;
+            }
+            .right-col {
+                float: right;
+                width: 48%;
+                text-align: justify;
+            }
+            .left-col {
+                float: left;
+                width: 48%;
+                text-align: justify;
+            }
+            .underline-cell {
+                border-bottom: 1px solid #ddd;
+            }
+            p {
+                margin: 0;
+                padding: 0;
+            }
+            ol, ul {
+                padding: 0 5px;
+                margin: 0 5px;
+            }
+            ol[start="4"]{
+                counter-reset: start 4;
+            }
+            ol[start="4"] > li {
+                display: block;
+            }
+            ol[start="4"] > li:before {
+                content: counter(start) ". ";
+                counter-increment: start;
+            }
+            ol.lower-alpha {
+                list-style-type: lower-alpha;
+            }
+            strong.clausula {
+                text-decoration: underline;
+            }
+            .messageCell > * {
+                font-size: 2.5em;
+                color: red;
+            }
+            .polig{
+            width:20px;
+            height:20px;
+            background:#FFFFFF;
+            border:solid 3px #626567 ;
+            font-family:arial;
+            font-weight:bold;
+            color:#EEEEEE;
+           }
+           .dmm{
+            width:8px;
+            height:8px;
+            background:#FFFFFF;
+            border:solid 1px #626567 ;
+            font-family:arial;
+            font-weight:bold;
+            color:#EEEEEE;
+           }
+
+            .texto-encima{
+            position: absoluta;
+            top: 10px;
+            left: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <apex:form >
+            <div class="header">
+                <table style="width: 100%;height: 100%;" >
+                    <!-- <tr>
+                        <td style="text-align: left;" ><apex:image width="60%" height="60%" id="logoVialli" value="{!$Resource.logo}" /></td>
+                        <td style="text-align: right;" ><apex:image width="40%" height="40%" id="logoFocus"  value="{!$Resource.logofocus}"/></td>
+                    </tr> -->
+                </table>
+            </div>
+            <apex:outputPanel rendered="{!direccionCompleta == false}">
+                <apex:pageMessages escape="false"/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c != cotizacion.Total_Pagos__c)}">
+                <apex:pageMessages />
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AND(direccionCompleta == true,cotizacion.Total_a_Pagar__c == cotizacion.Total_Pagos__c)}">
+                <!-- CLÁUSULAS carta oferta unilateral-->
+                <div id="clausulas" class="new-doc">
+                    <div class="left-col">
+                        <p style="text-align: right;"><strong>Querétaro, Querétaro, a {!hoy}</strong></p>
+                        <p>
+                            <strong>{!desarrollo.Razon_social_fiscal__c} (en el sucesivo “{!desarrollo.Razon_comercial__c}”), por conducto de sus representantes legales.</strong>
+                        </p>
+                        <p><strong>P R E S E N T E S.</strong></p>
+                        <br />
+                        <p>
+                            <strong>C. {!oportunidad.Account.Name}</strong>, por mi propio derecho hago de su conocimiento
+                            que por este medio presento voluntaria y formalmente ante ustedes, para los efectos a que haya
+                            lugar, una oferta unilateral de compra o adquisición, en lo sucesivo <strong>“LA OFERTA“</strong>,
+                            respecto del Lote que se menciona detalladamente en el <strong>ANEXO 1</strong> de la presente,
+                            perteneciente a la Unidad Condominal denominada <strong>“{!desarrollo.Nombre_largo__c}”</strong>, ubicado en
+                            el Municipio de Queretaro, estado de Querétaro y la vivienda prototipo que en este mismo
+                            anexo se menciona, que en un futuro será construida sobre el lote de terreno mencionado,
+                            con las especificaciones, ante proyecto y demás documentación que se acompaña a la
+                            presente como <strong>ANEXO 2</strong>, en lo sucesivo <strong>“LA VIVIENDA”</strong>.
+                        </p>
+                        <br />
+                        <p>
+                            <strong>“LA OFERTA”</strong> se presenta con base en los siguientes términos y condiciones:
+                        </p>
+                        <p>
+                            <strong class="clausula">PRIMERO.</strong> El presente documento constituye una oferta unilateral,
+                            voluntaria y expresa, para comprar o adquirir <strong>“LA VIVIENDA”</strong> descrita en el párrafo
+                            inicial del mismo, descripción que se tiene aquí por reproducida como si a la letra se insertase,
+                            y que se presenta de acuerdo con el artículo 1804 y demás relativos aplicables del Código Civil
+                            Federal y sus artículos correlativos en el interior de la República.
+                        </p>
+                        <p>
+                            <strong class="clausula">SEGUNDO.</strong> Manifiesto conocer la condición física y material del
+                            lote de terreno objeto de la presente y que he visitado el mismo, tomando conocimiento del mismo,
+                            así como de sus condiciones topográficas, climatológicas, de ubicación, comunicación y demás
+                            particularidades. Asimismo, manifiesto que estoy de acuerdo con el ante-proyecto y especificaciones
+                            de construcción de <strong>LA VIVIENDA</strong> y por tanto es mi voluntad adquirirla a través de
+                            los documentos definitivos que correspondan.
+                        </p>
+                        <p>
+                            <strong class="clausula">TERCERO.</strong>  El precio total que se ofrece para la compra de
+                            <strong>“LA VIVIENDA”</strong> motivo de <strong>“LA OFERTA”</strong> es la cantidad definida
+                            y detallada en el <strong>ANEXO 1</strong>, mismo que se adjunta a la presente, y sobre la cual entrego
+                            una solicitud de aprobación para el plan de pagos sobre el precio ofrecido, que se incluye en el <strong>ANEXO 1-A.</strong>
+                        </p>
+                        <p>
+                            Con el objeto de garantizar la <strong>“LA OFERTA”</strong>, por este conducto me obligo a las condiciones que me refiero en el mencionado <strong>ANEXO 1</strong>, como cantidades que entrego y me comprometo a entregar por concepto de depósito en garantía, con motivo de la presente <strong>CARTA OFERTA UNILATERAL</strong>.
+                        </p>
+                        <p>
+                            Todas las entregas de dinero descritas en el multicitado <strong>ANEXO 1</strong>, se harán a
+                            <strong>“{!desarrollo.Razon_comercial__c}”</strong> mediante transferencia bancaria, cheque o
+                            depósito en la cuenta que para tal efecto se me indique, sin superar en efectivo el monto que
+                            aplique la ley federal para la prevención e Identificación de Operaciones con Recursos de
+                            Procedencia Ilícita vigente a la firma del presente o en su domicilio ubicado en: Avenida Antea
+                            1088, piso 1-A, Jurica, Municipio de Querétaro, Estado de Querétaro.
+                        </p>
+                        <p>
+                            Las cantidades de dinero antes descritas las entregaré a Ustedes en calidad de <strong>
+                            Depósito en Garantía</strong> relacionado con <strong>“LA OFERTA”</strong> solicitándoles
+                            tenerlas en custodia hasta en tanto resuelven respecto de la aceptación o rechazo de
+                            <strong>“LA OFERTA”</strong>. En caso de ser aceptada <strong>“LA OFERTA”</strong>, y
+                            formalizada la operación de compraventa, las sumas de dinero recibidas por Ustedes como
+                            Depósito en Garantía, deberán ser aplicadas al precio de <strong>“LA VIVIENDA”</strong> y todas
+                            las cantidades de dinero deberán estar cubiertas 72 horas antes de la celebración del contrato
+                            de compraventa. En caso de que <strong>“LA OFERTA”</strong> no fuere aceptada por ustedes dentro
+                            del plazo previsto o si la misma quedare sin efectos de conformidad a lo establecido en el apartado
+                            Quinto siguiente, me deberá ser devuelta la cantidad que corresponda dentro de los 60 (sesenta)
+                            días naturales siguientes a la solicitud que debidamente fundada les entregue para la devolución.
+                        </p>
+                        <p>
+                            En el precio ofrecido por el suscrito Oferente no se incluyen los gastos que se llegasen a generar
+                            por concepto de escrituración, de crédito directo o bancario, en su caso, hipoteca o administrativos
+                            relacionados con trámites de crédito o similares, por lo que serán de mi exclusiva cuenta tales
+                            gastos, obligándome a pagarlos en el momento que se me requieran.
+                        </p>
+                        <p>
+                            De la misma manera, por éste conducto instruyo a <strong>“{!desarrollo.Razon_comercial__c}”</strong>
+                            para que lleve a cabo todos los actos materiales y jurídicos necesarios para construir
+                            <strong>“LA VIVIENDA”</strong> en términos generales conforme a las especificaciones contenidas en
+                            el ante-proyecto y demás documentos que acompañan a la presente como <strong>ANEXO 2</strong>,
+                            estando conforme con el mismo y por ello lo manifiesto en virtud de la <strong>“LA OFERTA”</strong>.
+                        </p>
+                        <p>
+                            <strong class="clausula">CUARTO.</strong> Manifiesto, bajo protesta de decir verdad, que los
+                            recursos monetarios con los cuales garantizo el cumplimiento de <strong>“LA OFERTA”</strong>
+                            son recursos de procedencia lícita.
+                        </p>
+                        <p>
+                            <strong class="clausula">QUINTO.</strong> Las condiciones bajo las cuales quedará sujeta
+                            <strong>“LA OFERTA”</strong>, además de las ya mencionadas, serán las siguientes:
+                            <ol>
+                                <li>
+                                    El plazo en el que <strong>“{!desarrollo.Razon_comercial__c}”</strong> me deberá de
+                                    informar de la aceptación o rechazo de <strong>“LA OFERTA”</strong> es de máximo
+                                    <strong>12 (doce) meses calendarios</strong> siguientes a la fecha de
+                                    <strong>“LA OFERTA”</strong>. En el entendido de que si en el plazo mencionado
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> no acepta por escrito
+                                    <strong>“LA OFERTA”</strong>, o si <strong>LA OFERTA</strong> fuese rechazada,
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> deberá de reembolsarme las cantidades
+                                    de dinero que hubiese entregado como Depósito en Garantía, en un plazo no mayor a 60
+                                    (sesenta) días naturales a partir de la solicitud de reembolso que por escrito les
+                                    realizaré.
+                                </li>
+                                <li>
+                                    Para que esta <strong>“OFERTA”</strong> se entienda que fue aceptada por
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> deberá notificarse en el domicilio
+                                    señalado por escrito y en forma expresa por conducto de alguno de los apoderados legales
+                                    que corresponda, que mi <strong>“OFERTA”</strong> ha sido aceptada.
+                                </li>
+                                <li>
+                                    En caso de que reciba de <strong>“{!desarrollo.Razon_comercial__c}”</strong> la
+                                    comunicación escrita de que <strong>“LA OFERTA”</strong> ha sido aceptada, las
+                                    cantidades de dinero entregadas como Depósito en Garantía deberán ser aplicadas
+                                    formalmente a cuenta del precio ofrecido mediante la celebración del contrato de
+                                    compraventa correspondiente en los términos y condiciones que convengan ambas partes.
+                                </li>
+                                <li>
+                                    <p>
+                                        Esta <strong>“OFERTA”</strong> es irrevocable y por tanto no podré desligarme de la
+                                        misma, y en caso de que insistiere en hacerlo tácita o expresamente, a título de pena
+                                        convencional y gastos administrativos acepto pagarle a
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong> el equivalente a
+                                        <strong>$50,000.00 (CINCUENTA MIL PESOS 00/100 M.N.)</strong>, aclarando que la pena
+                                        antes referida no se aplicará en caso de que el suscrito Oferente, habiendo realizado
+                                        todas y cada una de las acciones necesarias, no fuere sujeto de crédito a juicio de
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong>, o bien de la institución de
+                                        crédito que en su caso se hubiere elegido para la gestión y obtención de financiamiento.
+                                    </p>
+                                    <p>
+                                        La pena convencional antes descrita aplicará para
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong> y a favor del suscrito Oferente,
+                                        en el caso de que una vez transcurrido el plazo señalado en el numeral 1 de este
+                                        apartado, no hubiere una causa justificada, de acuerdo a los supuestos mencionadas
+                                        en el numeral 6 (seis) de este apartado, para rechazar o dejar sin efectos
+                                        <strong>“LA OFERTA”</strong>.
+                                    </p>
+                                </li>
+                            </ol>
+                        </p>
+                    </div>
+                    <div class="right-col">
+                        <p>
+                            <ol start="4">
+                                <li>
+                                    La posesión de <strong>“LA VIVIENDA”</strong> no me será entregada mientras no se cumplan en
+                                    su totalidad las siguientes condiciones: (i) que <strong>“LA OFERTA”</strong> se acepte por
+                                    parte de <strong>“{!desarrollo.Razon_comercial__c}”</strong>; (ii) que se firme el
+                                    respectivo contrato de compraventa respecto de <strong>“LA VIVIENDA”</strong>; (iii) que
+                                    el suscrito haya pagado el precio de <strong>“LA VIVIENDA”</strong> en su totalidad; y (iv)
+                                    que el contrato de compraventa correspondiente haya sido celebrado en escritura pública.
+                                    <p>
+                                        Una vez que <strong>“LA OFERTA”</strong> sea aceptada por
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong> y celebre el contrato de
+                                        compraventa correspondiente respecto de <strong>“LA VIVIENDA”</strong>,
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong> me hará entrega de una orden de
+                                        escrituración, haciéndome responsable de acudir ante el Notario que designe
+                                        <strong>“{!desarrollo.Razon_comercial__c}”</strong> para que este realice todos los
+                                        trámites necesarios para formalizar la transmisión y Escrituración del inmueble.
+                                    </p>
+                                </li>
+                                <li>
+                                    Se entenderá que me desligo expresa o tácitamente de <strong>“LA OFERTA”</strong> y en
+                                    consecuencia quedará sin efectos en los siguientes supuestos:
+                                    <ol class="lower-alpha">
+                                        <li>
+                                            Si no entrego todas las cantidades correspondientes al depósito en garantía la
+                                            forma y términos que se establecen en el apartado Tercero de
+                                            <strong>“LA OFERTA”</strong>; y/o
+                                        </li>
+                                        <li>
+                                            Si no entrego en los tiempos que me sean requeridos en su momento por
+                                            <strong>“{!desarrollo.Razon_comercial__c}”</strong>, la documentación necesaria
+                                            para la tramitación de crédito con alguna institución financiera para la obtención
+                                            de financiamiento; y/o
+                                        </li>
+                                        <li>
+                                            Si no comparezco a la firma del contrato de compraventa correspondiente a
+                                            <strong>“LA VIVIENDA”</strong> o a la firma de la escritura pública correspondiente
+                                            en el plazo que <strong>“{!desarrollo.Razon_comercial__c}”</strong> señale para
+                                            ello; y/o
+                                        </li>
+                                        <li>
+                                            Si la información que proporciono fuera falsa, incorrecta o no comprobable para
+                                            <strong>“{!desarrollo.Razon_comercial__c}”</strong>.
+                                        </li>
+                                    </ol>
+                                    En cualquiera de los supuestos antes indicados
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> deberá comunicarme fehacientemente
+                                    que no fue aceptada <strong>“LA OFERTA”</strong> o que la misma ha quedado sin efectos,
+                                    aplicándose lo dispuesto en el inciso 4 de este mismo apartado Quinto, por lo que
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> está autorizado para aplicar y
+                                    retener para sí la cantidad establecida como pena convencional ahí referida deduciéndola
+                                    de las sumas de dinero entregadas como depósito en garantía y el remanente deberá
+                                    entregarlo al suscrito en los 60 (sesenta) días naturales siguientes a la fecha de la
+                                    notificación respectiva, quedando consecuentemente
+                                    <strong>“{!desarrollo.Razon_comercial__c}”</strong> facultada para disponer libremente del
+                                    <strong>“LA VIVIENDA”</strong> objeto de la presente Oferta.
+                                </li>
+                                <li>
+                                    Entiendo que sin el consentimiento de <strong>“{!desarrollo.Razon_comercial__c}”</strong>
+                                    no podré ceder ningún tipo de derecho que me pudiera derivar de <strong>“LA OFERTA”</strong>
+                                    o de su aceptación, ni modificar la ubicación del inmueble que ofrezco adquirir, obligándome
+                                    a suscribir en su momento el correspondiente Contrato de Compra-Venta.
+                                </li>
+                                <li>
+                                    Para el supuesto que fuese aceptada <strong>“LA OFERTA”</strong>, manifiesto mi
+                                    conocimiento y expresa conformidad sobre las normas de usos, lineamientos y restricciones
+                                    de construcción existentes o que en su caso se implementen de manera general respecto de
+                                    las especificaciones de Construcción del Condominio en donde se ubica
+                                    <strong>“LA VIVIENDA”</strong>, así como con las disposiciones derivadas del Reglamento
+                                    Interno de dicho Condominio, Reglamento de Diseño y Construcción y de los demás Reglamentos
+                                    emitidos por las Autoridades Gubernamentales correspondientes, las cuales me obligo desde
+                                    ahora a cumplir y respetar en todos sus términos.
+                                </li>
+                            </ol>
+                        </p>
+                        <p>
+                            <strong class="clausula">SEXTO.</strong> En el contrato de compraventa o escritura pública que se
+                            llegue a celebrar se deberá estipular que <strong>“LA VIVIENDA”</strong> quedará sujeta a los
+                            Planes de Desarrollo Urbano y a las declaraciones de usos y destinos que dicten las autoridades
+                            administrativas con base en la legislación aplicable.
+                        </p>
+                        <p>
+                            <strong class="clausula">SÉPTIMO.</strong> El presente documento constituye una declaración
+                            unilateral de la voluntad única y exclusivamente con el objeto de que se considere mi intención
+                            de adquirir un lote, una vez que se cuente con las autorizaciones administrativas correspondientes.
+                        </p>
+                        <p>
+                            <strong class="clausula">OCTAVO.</strong> Manifiesto conocer que los honorarios, gastos, impuestos
+                            y derechos que se originen con motivo de la celebración de la compraventa serán cubiertos por quien
+                            suscribe la presente carta intención (incluyendo el IVA sobre la construcción, en caso de que
+                            llegase a aplicar) salvo el impuesto sobre la renta que será invariablemente a cargo de la
+                            enajenante.
+                        </p>
+                        <p>
+                            <p>
+                                <strong class="clausula">NOVENO.</strong> La entrega de documentación y notificaciones que
+                                con la presente se relacionen, nos deberá ser efectuada en el domicilio ubicado en:
+                                <strong>{!oportunidad.Account.BillingStreet}, {!oportunidad.Account.Colonia__c}, {!oportunidad.Account.BillingCity}, {!oportunidad.Account.BillingState}, {!oportunidad.Account.BillingPostalCode}</strong>
+                            </p>
+                        </p>
+                        <p>
+                            El suscrito <strong>OFERENTE</strong>, manifiesto a
+                            <strong>“{!desarrollo.Razon_comercial__c}”</strong> que renuncio expresamente al fuero que por
+                            razón del domicilio presente o futuro pudiera corresponderme y estoy de acuerdo en someterme
+                            expresamente a las leyes y a la jurisdicción de los tribunales competentes de la Ciudad de
+                            Querétaro, Estado de Querétaro, para cualquier controversia que se suscite en la interpretación
+                            de <strong>“LA OFERTA”</strong>.
+                        </p>
+                        <p style="text-align: center;">
+                            <br />   <br /> <br />
+                            <strong>ATENTAMENTE</strong>
+                            <br />  <br />  <br />
+                            <br />
+                            <br />
+                            ______________________________________
+                            <br />
+                            <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                            )}">
+                                <strong>{!cotizacion.Contact.Name}</strong>
+                                <br />
+                            </apex:outputPanel>
+                            <strong>{!oportunidad.Account.Name}</strong>
+                            <br />
+                            (ANEXO COPIA DE IDENTIFICACIÓN OFICIAL)
+                        </p>
+                        <br />
+                        <br />
+                        <p>
+                            Recibimos la presente “OFERTA” para su estudio y proposición a “{!desarrollo.Razon_comercial__c}”:
+                        </p>
+                        <br />
+                        <p>
+                            Querétaro, Qro. a {!hoy}.
+                        </p>
+                        <br />
+                        <p>
+                            Por: <strong>{!desarrollo.Razon_social_fiscal__c}</strong>
+                        </p>
+                        <p style="text-align: left;">
+                            <br /><br /><br />
+                            <br />
+                            <br />
+                            ______________________________________
+                            <br />
+                            <strong>{!usuario.Name}</strong>
+                        </p>
+                    </div>
+                    <div style="clear: both;">
+                    </div>
+                </div>
+                <!-- FIN CLÁUSULAS  -->
+ <!--anexo 1 __________________________________________________________________________________- -->
+                <div id="anexo-1" style="text-align: left;" >
+                 <P ALIGN="right"><apex:outputText value="{0, date, MMMM d','  yyyy}"> Fecha generacion de Boletín:  <apex:param value="{!TODAY()}" /> </apex:outputText></p>
+                    <h2 style=" font-size: 10pt;">ANEXO 1 - Descripción de la oferta</h2>
+
+                    <table style=" font-size: 9pt;" class="detailTable">
+                        <tr>
+                            <th><h3>Datos del cliente</h3></th>
+                            <th>La vivienda</th>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align: top;">
+                                <b>Nombre: </b>
+                                {!oportunidad.Account.Name}
+                                <br/>
+                                <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name != 'Persona Moral'
+                                            )}">
+                                    <b>Estado Civil: </b>
+                                    {!oportunidad.Account.Estado_civil__c}
+                                    <br/>
+                                    <b>Edad: </b>
+                                    {!oportunidad.Account.Edad__c}
+                                    <br/>
+                                    <b>Teléfono: </b>
+                                    {!oportunidad.Account.Phone}
+                                    <br/>
+                                    <b>Celular: </b>
+                                    {!oportunidad.Account.PersonMobilePhone}
+                                    <br/>
+                                    <b>Correo electrónico: </b>
+                                    {!oportunidad.Account.PersonEmail}
+                                    <br/>
+                                    <b>Calle y Número: </b>
+                                    {!oportunidad.Account.BillingStreet}
+                                     <br/>
+                                    <b>Colonia: </b>
+                                    {!oportunidad.Account.Colonia__c}
+                                     <br/>
+                                    <b>Municipio: </b>
+                                    {!oportunidad.Account.BillingCity}
+                                     <br/>
+                                    <b>C.P.: </b>
+                                    {!oportunidad.Account.BillingPostalCode}
+                                     <br/>
+                                    <b>Estado: </b>
+                                    {!oportunidad.Account.BillingState}
+                                </apex:outputPanel>
+                            </td>
+                            <td style="vertical-align: top;">
+                            <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem" >
+
+                                  <b>Referencia: </b>{!quoteItem.PricebookEntry.Product2.Name}
+                                 </apex:repeat><br />
+
+                                <b>Manzana: </b>
+                                {!casa.PricebookEntry.Product2.MZN__c}
+                                <br />
+                                <b>Lote: </b>
+                                {!casa.PricebookEntry.Product2.Lote__c}
+                                <br />
+
+                                <b>Prototipo: </b>
+                                {!casa.PricebookEntry.Product2.PrototipoLookUp__r.Name}
+                                <br />
+                                <b>m<sup>2</sup> de construcción: </b>
+                                {!casa.PricebookEntry.Product2.Const_M2__c}
+                                <br />
+                                <b>m<sup>2</sup> de terreno: </b>
+                                {!casa.PricebookEntry.Product2.Terreno_M2__c}
+                                <br />
+                                <br />
+                                <b>Propietario de oportunidad </b>
+                                <br />
+                               {!oportunidad.Name_cv__c}
+                               <br />
+                               <b>Asesor</b>
+                                <br />
+                               {!oportunidad.Asesor_Externo_Original__c}
+                               
+                            </td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="2">
+
+
+
+                            </td>
+                        </tr>
+
+
+                        <apex:outputPanel rendered="{!AND(
+                                                oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                            )}">
+                            <tr>
+                                <th><h3 style=" font-size: 8pt;">Datos del representante legal</h3></th>
+                                <th></th>
+                            </tr>
+                            <tr style=" font-size: 8pt;">
+                                <td style="vertical-align: top:  font-size: 8pt; ">
+                                    <b>Nombre: </b>
+                                    {!cotizacion.Contact.Name}
+                                    <br/>
+                                    <b>Teléfono: </b>
+                                    {!cotizacion.Contact.Phone}
+                                    <br/>
+                                    <b>Celular: </b>
+                                    {!cotizacion.Contact.MobilePhone}
+                                    <br/>
+                                    <b>Correo electrónico: </b>
+                                    {!cotizacion.Contact.Email}
+                                    <br/>
+                                </td>
+                                <td style="vertical-align: top;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"  style="font-size: 8pt; ">
+                                    <b>Calle y Número: </b> {!cotizacion.Contact.MailingStreet}
+                                    <b>Municipio: </b>{!cotizacion.Contact.MailingCity}
+                                    <b>C.P.: </b>{!cotizacion.Contact.MailingPostalCode}
+                                    <b>Estado: </b>{!cotizacion.Contact.MailingState}
+                                </td>
+                            </tr>
+                        </apex:outputPanel>
+                    </table>
+                    <br/>
+                    <br/>
+
+                    <table style=" font-size: 8pt;">
+                    <tr>
+                    <td>
+
+                     <h3>Lista de productos</h3>
+                                <table>
+
+                                    <tr>
+                                        <th style="width: 45%;">Producto</th>
+                                        <th style="width: 15%;">Tipo</th>
+                                        <th style="width: 15%;">Sub Total</th>
+                                        <th style="width: 10%;"></th> 
+                                        <th align="width: 15%;">Precio Final</th>
+                                    </tr>
+                                    <apex:repeat value="{!lstQuoteLineItem}" var="quoteItem">
+                                        <tr>
+                                            <td>{!quoteItem.PricebookEntry.Product2.Name}</td>
+                                            <td>{!quoteItem.PricebookEntry.Product2.RecordType.Name}</td>
+                                            <td>
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!quoteItem.Subtotal}"/>
+                                                </apex:outputText>
+                                            </td>
+                                           <!--  <td style="text-align: right: 20%;">
+                                               <apex:outputText value="{0,,00}">
+                                                    <apex:param value="{!quoteItem.Discount}"/>
+                                                </apex:outputText>
+                                                % 
+                                            </td> -->
+                                             <td></td>
+                                              <td>
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!quoteItem.TotalPrice}"/>
+                                                </apex:outputText>
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                                </table>
+                       </td>  </tr>
+                    </table>
+
+
+                    <table width="100px" style=" font-size: 8pt;" >
+                        <tr>
+                            <th><h3></h3></th>
+                        </tr>
+                        <tr>
+
+                            <td style="vertical-align: top;">
+
+
+                            </td>
+                        </tr>
+                    </table>
+
+                    <br/>
+                    <br/>
+
+                   <table style=" font-size: 9pt;" class="detailTable">
+     <tr>
+      <th><h3>Condiciones de pago (ver Anexo 1-A)</h3></th>
+      <th>Precio total
+</th>
+      </tr>
+       <tr>
+           <td style="vertical-align: top;">
+                    <b>Método de pago: </b>
+                                {!cotizacionConPagos.Tipo_de_Metodo_de_Pago__c}
+                                <br />
+                                <b>Institución y plazo: </b>
+                                {!cotizacionConPagos.Metodo_de_Pago__c}
+                                <br />
+                                <b>Importe crédito hipotecario: </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacionConPagos.Credito__c}" />
+                                </apex:outputText>
+                                <br />
+                                <b>Importe crédito Infonavit o Fovissste: </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Credito_Infonavit__c,
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste',
+                                                cotizacionConPagos.Credito_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText>
+                                <br />
+                                <b>Saldo subcuenta (ahorro Infonavit o Fovissste): </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!
+                                        IF(
+                                            OR(
+                                                cotizacionConPagos.Tipo_de_Metodo_de_Pago__c == 'Infonavit',
+                                                cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Infonavit'
+                                            ),
+                                            cotizacionConPagos.Ahorro_Infonavit__c,
+                                            IF(cotizacionConPagos.Tipo_de_Modo_de_Pago__c == 'Fovissste',
+                                                cotizacionConPagos.Ahorro_Fovissste__c, 0
+                                            )
+                                        )
+                                    }"/>
+                                </apex:outputText>
+                                <br />
+                                <b>Depósito en Garantía: </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacionConPagos.Apartado__c}" />
+                                </apex:outputText>
+                                <br />
+           </td>
+
+          <td style="vertical-align: top;">
+                <b>Precio de la vivienda: </b>
+                            
+ 
+ <apex:repeat rows="1" value="{!lstQuoteLineItem}" var="quoteItem">
+    <apex:outputText value="{0, number, currency}">  
+      <apex:param value="{!quoteItem.TotalPrice}"/>
+    </apex:outputText>
+</apex:repeat>
+                            
+                            
+                                <br />
+                                <b>Precio adicional: </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacion.Total_a_Pagar__c - (cotizacion.Total_Casa__c - cotizacion.Total_Descuento_Casa__c)}" />
+                                </apex:outputText>
+                                <br />
+                                <b>Precio total: </b>
+                                <apex:outputText value="{0, number, currency}">
+                                    <apex:param value="{!cotizacion.Total_a_Pagar__c}" />
+                                </apex:outputText>
+                                <br />
+          </td>
+      </tr>
+ </table>
+
+
+                    <table style="font-size: 8pt;: top; width: 100%;">
+                       <tr>
+                            <th><h3>Plan de pagos</h3></th>
+                        </tr>
+                         <tr class="row-head">
+                                        <th style="width: 33%;">Fecha</th>
+                                        <th style="width: 33%;">Monto</th>
+                                        <th style="width: 33%;">Tipo</th>
+                                    </tr>
+                                    <apex:repeat value="{!lstPagos}" var="pago">
+                                        <tr>
+                                            <td style="width: 20%;">
+                                                <apex:outputText value="{0, date, yyyy'/'MM'/'dd}">
+                                                    <apex:param value="{!pago.Fecha__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                            <td style="width: 25%;">
+                                                <apex:outputText value="{0, number, currency}">
+                                                    <apex:param value="{!pago.Monto__c}" />
+                                                </apex:outputText>
+                                            </td>
+                                            <td style="width: 55%;">
+                                                {!pago.Tipo__c}
+                                            </td>
+                                        </tr>
+                                    </apex:repeat>
+                        </table>
+
+
+                    <p style="text-align: center; margin: 50px 0 20px 0; font-size: 8pt;"  class="new-doc">
+                        ______________________________________
+                        <br />
+                        <apex:outputPanel rendered="{!AND(
+                                            oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                        )}">
+                            <strong>{!cotizacion.Contact.Name}</strong>
+                            <br />
+                        </apex:outputPanel>
+                        <strong>{!oportunidad.Account.Name}</strong>
+                        <br />
+                    </p>
+                    <!-- <p>
+                        Este presupuesto es con fines informativos y no constituye obligación de venta ni compromiso de precios. Los precios serán los que estén vigentes al día de la operación. Las condiciones de crédito dependen de la institución que lo otorga y se alicarán las vigentes a la fecha de escrituración. Los gastos,ipuestos y honorarios notariales, serán los que determine el Notario Público que celebre las escrituras correspondientes. Los gastos de escrituración podrán variar respecto de los presentados por los simuladores de crédito de las instituciones de crédito debido a que sus cálculos son aproximados.
+                    </p> -->
+                </div>
+
+ </apex:outputPanel>
+
+<!--  DUEÑO BENEFICIARIO __________________________________________________________________________ -->
+
+            <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name != '')}">
+
+              <div id="anexo-1" style="text-align: left;" class="new-doc">
+                    <h2><strong>{!desarrollo.Razon_social_fiscal__c}</strong>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Constancia de Dueño Beneficiario.</h2>
+                    <h1>P R E S E N T E ,-</h1>
+                    <table  class="detailTable" style="estilo1;">
+                    <br />
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;En relación con la solicitud respecto de la información sobre el conocimiento de la
+                            existencia de <strong> DUEÑO BENEFICIARIO</strong> y/o BENEFICIARIO CONTROLADOR, y en su caso sobre
+                            los datos, documentos o información que permita identificarlo y/o identificarlos, en términos del
+                            Artículo 3 fracción III de la Ley Federal para la Prevención e Identificación de Operaciones con
+                            Recursos de Procedencia Ilícita que lo define como:
+                        </span></p>
+                    <br/>
+
+                    <br /><br />
+
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">Artículo 3. Para los efectos de esta Ley, se entenderá por:  </span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">“…III.- Beneficiario Controlador, a la persona o grupo de personas que:</span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">a)Por medio de otra o de cualquier acto, obtiene el beneficio derivado de éstos y es quien, en última instancia,
+                            ejerce los derechos de uso, goce, disfrute, aprovechamiento o disposición de un bien o servicio, o </span></I></p>
+                    <P ALIGN="justify"><I><span style=" font-size: 10pt;">b)Ejerce el control de aquella persona moral que, en carácter de cliente o usuario, lleve a cabo actos u
+                            operaciones con quien realice Actividades Vulnerables, así como las personas por cuenta de quienes celebra alguno de ellos.</span></I></p>
+
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">Se entiende que una persona o grupo de personas controla a una persona moral cuando, a través de la
+                             titularidad de valores, por contrato o de cualquier otro acto, puede:</span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">i)Imponer, directa o indirectamente, decisiones en las asambleas generales de accionistas, socios u órganos
+                            equivalentes, o nombrar o destituir a la mayoría de los consejeros, administradores o sus equivalentes;</span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">ii) Mantener la titularidad de los derechos que permitan, directa o indirectamente, ejercer el voto respecto de
+                            más del cincuenta por ciento del capital social, o </span></I></p>
+                     <P ALIGN="justify"><I><span style=" font-size: 10pt;">iii)Dirigir, directa o indirectamente, la administración, la estrategia o las principales políticas de la misma…”</span></I></p>
+
+                            <br /><br /><br />
+
+
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;BAJO PROTESTA DE DECIR VERDAD y conociendo las penas que incurren quienes
+                           declaran falsamente ante personas Obligadas que realizan Actos u Operaciones Vulnerables y enterado del contenido del artículo 62 de la citada Ley, le hago saber:
+                        </span></p>
+                    <br/> <br /> <br/> <br /> <br/> <br />
+
+
+                    <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="polig"></div> </TD>      <TD><P ><span style=" font-size: 12pt;">NO TENGO CONOCIMIENTO</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="polig"></div> </TD>      <TD><P ><span style=" font-size: 12pt;">SI TENGO CONOCIMIENTO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                    <br/> <br /> <br/> <br /> <br/> <br />
+                    <br />
+                        <P ALIGN="justify"><span style=" font-size: 12pt;">
+                           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;de la existencia de un <strong> DUEÑO BENEFICIARIO</strong> y/o <strong>BENEFICIARIO CONTROLADOR.</strong> En
+                           caso de tener una respuesta afirmativa “me obligo” a presentar los documentos correspondientes
+                           como lo solicita el artículo 22 de las Reglas de Carácter General de la Ley Federal para la
+                           Prevención e Identificación de Operaciones con Recursos de Procedencia Ilícita.
+                        </span></p>
+                         <P ALIGN="justify"><I><span style=" font-size: 10pt;">(…"Cuando quien
+                               realiza una Actividad Vulnerable cuente con información basada en indicios o hechos acerca de que alguno de
+                                sus Clientes o Usuarios actúa por cuenta de otra persona.. deberá solicitar al Cliente o Usuario de que se
+                                trate, información que le permita identificar al Dueño Beneficiario, sin perjuicio de los deberes de
+                                confidencialidad frente a terceras personas que dicho Cliente o Usuario haya asumido por vía convencional" ).</span></I></p>
+                        <br/> <br/> <br /> <br/> <br /> <br/> <br />
+
+
+                        <table align="center" border="0"  width="100%" cellpadding="0" cellspacing="0" style="text-align: center;">
+                           <tr>
+                            <td>___________________________________________</td>
+                            <td>___________________________________________</td>
+                            <td>___________________________________________</td>
+                           </tr>
+
+                           <tr>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Nombre</span></I></p></td>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Firma</span></I></p></td>
+                            <td><P ALIGN="center"><I><span style=" font-size: 10pt;">Fecha</span></I></p></td>
+                           </tr>
+                    </table>
+                   </table>
+                </div>
+           </apex:outputPanel>
+<!-- persona fisica __________________________________________________________________________ -->
+     <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name == 'Persona Fisica')}">
+          <P ALIGN="center"><I><span style=" font-size: 8pt;">Ficha de identificación pf mexicana/ o extranjera con condiciones residentes temporales o permanentes en el pais</span></I></p>
+          <P ALIGN="right"><apex:outputText value="{0, date, MMMM d','  yyyy}"> Fecha generacion de Boletín:  <apex:param value="{!TODAY()}" /> </apex:outputText></p>
+          <P ALIGN="center">  <apex:image value="{!$Resource.Pf}" /></p>
+             <br/><br/><br/>
+
+          <P><span style=" font-size: 10pt;"><strong>Cliente</strong></span></p>
+            <P><I><span style=" font-size: 9pt;">Usted, ¿Actúa por su cuenta?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">¿Viene por encargo de Alguien?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">En relación al articulo 3 fracción III de la LFPIORPI, ¿en esta operación existe o reconoce un Dueño beneficiario o Beneficiario controlador?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                      <p style="text-align: center; margin: 40px 0 20px 0; font-size: 8pt;">
+                        ______________________________________
+                        <br />
+                        <apex:outputPanel rendered="{!AND(
+                                            oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                        )}">
+                            <strong>{!cotizacion.Contact.Name}</strong>
+                            <br />
+                        </apex:outputPanel>
+                        <strong>{!oportunidad.Account.Name}</strong>
+                        <br />
+                    </p>
+
+</apex:outputPanel>
+
+<!-- persona moral __________________________________________________________________________  -->
+    <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name == 'Persona Moral')}"> <br/>
+     <P ALIGN="right"><span style=" font-size: 14pt;">FICHA DE IDENTIFICACIÓN</span></p>
+     <P ALIGN="right"><apex:outputText value="{0, date, MMMM d','  yyyy}"> Fecha generacion de Boletín:  <apex:param value="{!TODAY()}" /> </apex:outputText></p>
+     <P ALIGN="center">  <apex:image value="{!$Resource.Pm}" /></p>
+         <P><I><span style=" font-size: 9pt;">Usted, ¿Actúa por su cuenta?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">¿Viene por encargo de Alguien?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+            <P><I><span style=" font-size: 9pt;">En relación al articulo 3 fracción III de la LFPIORPI, ¿en esta operación existe o reconoce un Dueño beneficiario o Beneficiario controlador?</span></I></p>
+                      <TABLE>
+                             <TR>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                              <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">SI</span></p></TD>
+                             <TD >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </TD>
+                             <TD > <div class="dmm"></div> </TD>      <TD><P ><span style=" font-size: 10pt;">NO</span></p></TD>
+                             </TR>
+                     </TABLE>
+
+                      <p style="text-align: center; margin: 50px 0 20px 0; font-size: 8pt;">
+                        ______________________________________
+                        <br />
+                        <apex:outputPanel rendered="{!AND(
+                                            oportunidad.Account.RecordType.Name == 'Persona Moral'
+                                        )}">
+                            <strong>{!cotizacion.Contact.Name}</strong>
+                            <br />
+                        </apex:outputPanel>
+                        <strong>{!oportunidad.Account.Name}</strong>
+
+                    </p>
+
+</apex:outputPanel>
+<div id="anexo-1" style="text-align: left;" class="new-doc"></div>
+
+ <!-- Aviso de privacidad __________________________________________________________________________  -->
+  <apex:outputPanel rendered="{!AND(oportunidad.Account.RecordType.Name != '')}">
+     <P ALIGN="center"><span style=" font-size: 8pt;"><strong>AVISO DE PRIVACIDAD</strong></span></p>
+     <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><P ALIGN="center"><span style=" font-size: 8pt;"><strong></strong></span></p>
+
+     <div id="aviso de priv" style=" font-size: 7pt;">
+                    <div  class="left-col">
+
+                        <p>
+                           De conformidad en lo dispuesto por la Ley Federal de Protección de Datos
+                           Personales en Posesión de Particulares, se emite el presente Aviso de
+                           Privacidad en los siguientes términos:
+                        </p>
+                        <br />
+                        <p>
+                            <strong>IDENTIDAD Y DOMICILIO DEL RESPONSABLE DE LOS DATOS PERSONALES:</strong>
+                            Para efectos del presente Aviso de Privacidad, {!desarrollo.Razon_social_fiscal__c},
+                             y sus empresas afiliadas y subsidiarias (en adelante el “EL
+                            RESPONSABLE”), señalan como encargado de la obtención, divulgación,
+                            almacenamiento, uso, incluido acción de acceso, manejo, aprovechamiento,
+                            transferencia o disposición de datos personales (en adelante el “Tratamiento”)
+                            al Encargado del departamento de Protección de Datos Personales Jessica
+                            Mariana Sánchez Jarquín, designado por EL RESPONSABLE, (en lo sucesivo el
+                            “ENCARGADO”), con domicilio en Avenida Antea 1088, Jurica, C.P. 76100
+                            Querétaro, Qro.
+                        </p>
+                        <br />
+                       <p>
+                            <strong>INFORMACIÓN A RECABAR Y FINALIDADES DEL TRATAMIENTO DE DATOS
+                            PERSONALES:</strong>
+                           Le informamos que EL RESPONSABLE podrá recopilar su
+                           información a través de diferentes fuentes, ya sea Personal y/o Directamente
+                           proporcionados por el Titular o Indirectamente por cualquier otra fuente de
+                           información comercialmente disponibles o que sean permitidas por la Ley. La
+                           colecta y Tratamiento de datos personales del Titular, incluyendo los datos
+                           personales sensibles que en su caso lleguemos a recabar, y salvo que el Titular
+                           disponga lo contrario mediante el medio descrito en el presente Aviso de
+                           Privacidad, tiene como finalidad, la evaluación de solicitudes de empleo,
+                           contratación de empleados, evaluación de contratistas, propuestas y
+                           contratación con proveedores de servicios y productos, elaboración y manejo
+                           de contratos comerciales, procesos de pago, así como para el cumplimiento con
+                           nuestras obligaciones laborales, administrativas, comerciales y fiscales
+                           establecimiento de bases de datos de proveedores, desarrollo de nuevos
+                           productos y servicios, asesoría, comercialización, promoción, contratación y
+                           colocación de todo tipo de servicios y productos y/o mejora de nuestros
+                           productos y servicios y otras obligaciones derivadas de cualquier relación
+                           jurídica entre el titular de datos personales y EL RESPONSABLE o las empresas
+                           afiliadas y subsidiarias de EL RESPONSABLE. Sus datos personales, también
+                           podrán tener, entre otras, las siguientes finalidades: (i) Atender requerimientos
+                           legales de autoridades competentes; (ii) Hacer de su conocimiento, la gama de
+                           nuevos productos y servicios, así como beneficios, descuentos, promociones,
+                           estudios de mercado, promociones, notificaciones sobre cambio en
+                           condiciones y en general toda la publicidad derivada de los productos y
+                           servicios que ofrece EL RESPONSABLE y/o las empresas afiliadas y subsidiarias
+                           de EL RESPONSABLE; (iii) Análisis y desarrollo de productos y de proveedores
+                           así como el uso de nuestros productos y servicios; y (iv) Para el cumplimiento
+                           de nuestros términos y condiciones con relación a nuestras obligaciones,
+                           convenios, contratos, así como para el desarrollo de productos, venta de
+                           productos o la prestación de nuestros servicios; y (v) en su caso, para el uso de
+                           nuestras áreas de recursos humanos y compras, de conformidad a las políticas
+                           de estas últimas.<strong>*Los datos sensibles que se pudieran recabar podrán ser
+                           utilizados para el mejor cumplimiento de nuestros objetivos legales, fiscales o
+                           comerciales.</strong>
+                        </p>
+                        <br />
+                         <p>
+                            <strong>OPCIONES Y MEDIOS QUE EL RESPONSABLE, OFRECE A LOS TITULARES DE
+                            DATOS PERSONALES PARA LIMITAR EL USO O DIVULGACIÓN DE SU
+                            INFORMACIÓN:</strong>
+                            Los datos personales del titular, serán mantenidos en estricta
+                            confidencialidad, de conformidad con las medidas de seguridad,
+                            administrativas, técnicas y físicas que al efecto EL RESPONSABLE ha
+                            implementado y las que en el futuro implemente en sus políticas y
+                            procedimientos de seguridad, quedando prohibido su divulgación ilícita y
+                            limitando su uso a terceros, conforme a lo previsto en el presente Aviso de
+                            Privacidad.
+                        </p>
+                         <br />
+                         <p>
+                            <strong>MEDIOS PARA EL EJERCICIO DE DERECHOS DEL TITULAR:</strong>
+                            El titular de datos
+                            personales, podrá ejercer sus derechos de acceso, rectificación, cancelación,
+                            posición, limitación de uso, divulgación o revocación, mediante solicitud por
+                            escrito enviada vía correo postal o correo electrónico dirigidos a:
+                        </p>
+                         <br />
+                         <p>
+                            <strong>Por correo postal o mensajería privada:</strong>
+                            Jessica Mariana Sánchez Jarquín como representante de EL RESPONSABLE al
+                            siguiente domicilio: Avenida Antea 1088, Jurica, C.P. 76100 Querétaro, Qro.
+                            
+                        </p>
+                        <br />
+                         <p>
+                            <strong>Por correo electrónico a:</strong>
+                            atencionaclientes@vialli.mx
+                        </p>
+                        <br />
+
+
+                    </div>
+
+
+                    <div class="right-col">
+                    <p>
+                            Mediante solicitud por escrito que contenga la siguiente información: (i) El
+                            nombre completo del titular de los datos personales, domicilio y cuenta de
+                            correo electrónico, para poder comunicarle la respuesta a su solicitud; (ii) Los
+                            documentos que acrediten la identidad y en su caso la representación legal del
+                            titular de los datos personales; (iii) La descripción clara y precisa de los datos
+                            personales respecto de los que se busca ejercer alguno de los derechos antes
+                            mencionados; (iv) Cualquier otro elemento o documento que facilite la
+                            localización de los datos personales; y
+                            (v) En el caso de solicitudes de rectificación de datos personales, el titular,
+                            deberá indicar, las modificaciones a realizarse y aportar la documentación que
+                            sustente su petición.
+                        </p>
+                      <p>
+                            <strong>TRANSFERENCIA DE DATOS PERSONALES.</strong>
+                            EL RESPONSABLE podrá realizar la transferencia de datos a: (i) Las empresas
+                            afiliadas y subsidiarias de EL RESPONSABLE y la compañía a nivel internacional;
+                            (ii) Terceros proveedores de servicios para el cumplimiento de las obligaciones
+                            legales adquiridas por EL RESPONSABLE o por cualquiera de las empresas
+                            afiliadas y subsidiarias de EL RESPONSABLE; (iii) Terceros proveedores de
+                            servicios de investigación, análisis de datos, envío de información enfocada a
+                            las necesidades del titular de datos personales, así como en la realización de
+                            otros servicios financieros necesarios
+                            o requeridos por el titular de datos personales; (iv) Socios comerciales con los
+                            que EL RESPONSABLE o cualquiera de las empresas de EL RESPONSABLE, lleve
+                            a cabo convenios o contratos enfocados al desarrollo de nuevos productos y/o
+                            servicios enfocados al mejoramiento y de acuerdo a sus necesidades e
+                            investigación; (v) Terceros derivado de un reestructura corporativa,
+                            incluyendo, la fusión, consolidación, venta, liquidación o transferencia de
+                            activos; y (vi) Otras transmisiones previstas en la Ley citada y su Reglamento.
+                        </p>
+                        <br />
+                         <p>
+                            <strong>*Los terceros y las entidades receptores de datos personales, asumen las
+                            mismas obligaciones y/o responsabilidades de EL RESPONSABLE, de
+                            conformidad con lo descrito en el presente Aviso de Privacidad.</strong>
+                         </p>
+                         <p>
+                            <strong>*El titular de datos personales que presenta cualquier solicitud para entablar
+                            una relación jurídica con EL RESPONSABLE o por cualquiera de las empresas
+                            de EL RESPONSABLE, acepta la transferencia de sus datos personales, en los
+                            términos descritos en el presente Aviso de Privacidad.</strong>
+                         </p>
+                         <br />
+                         <p>
+                         <strong>CAMBIOS AL AVISO DE PRIVACIDAD:</strong>
+                           Cualquier cambio al presente aviso de
+                           privacidad, le será informado a través de cualquiera de los siguientes medios:
+                           (i) Avisos en las plantas de EL RESPONSABLE; y (ii) Cualquier otro medio de
+                           comunicación público o privado previstos en los contratos que amparan las
+                           operaciones celebradas entre EL RESPONSABLE o por cualquiera de las
+                           empresas de EL RESPONSABLE;
+                        </p>
+                        <br />
+                         <p>
+                           El Encargado será en todo tiempo designado por el representante legal de la
+                           empresa {!desarrollo.Razon_social_fiscal__c}.
+                        </p>
+                       <br />
+                         <p>
+                         <strong>ACUSE DE RECIBO DE AVISO DE PRIVACIDAD</strong>
+                         </p>
+                       <br />
+                         <p>
+                         <strong>AL FIRMAR ESTE DOCUMENTO USTED ACEPTA HABER RECIBIDO UNA COPIA
+                         DEL AVISO DE PRIVACIDAD DE VIVE U-CALLI INMOBILIARIA, SAPI DE CV, EL
+                         CUAL DESCRIBE CÓMO UTILIZAMOS Y DIVULGAMOS SU INFORMACIÓN.
+                         USTED TIENE DERECHO DE REHUSARSE A FIRMAR ESTE ACUSE DE RECIBO, EN
+                         CUYO CASO DEBEREMOS DOCUMENTAR NUESTRO ESFUERZO DE BUENA FE
+                         POR OBTENER SU ACUSE DE RECIBO Y LA RAZÓN POR LA CUAL NO LO
+                         OBTUVIMOS.</strong>
+                         </p>
+                        <br /><br /><br />
+                        <p>______________________________</p>
+                         <p><br />
+                         <strong>NOMBRE</strong>
+                         </p>
+                         <br /><br /><br />
+                         <p>______________________________</p>
+                         <p><br />
+                         <strong>FECHA</strong>
+                         </p>
+                         <br /><br /><br />
+                         <p>______________________________</p>
+                         <p><br />
+                         <strong>FIRMA</strong>
+                         </p>
+
+
+                    </div>
+                    <div style="clear: both;">
+                    </div>
+                </div>
+
+
+ </apex:outputPanel>
+ <!-- memorias descrip _________________________________________________________________________________  -->
+ <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cedro')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cedro RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJC3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+   
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Maple')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+        <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Maple RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nogal')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nogal RG')}">
+      <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+ 
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo RG1')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Olmo RG2')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2O}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3O}" width="780" height="940" /></p>
+    </apex:outputPanel>
+ 
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Encino')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIII3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIII4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+      <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Laurel')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIL4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+ <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Roble Golf')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIR4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Sauce')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIIIS4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cerezo')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVC4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Laurel S4')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVL4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Tabachin S4')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT3}" width="780" height="940" /></p><P ALIGN="center">  <apex:image value="{!$Resource.DSamIVT4}" width="780" height="940" /></p>
+   </apex:outputPanel>
+ 
+ 
+ 
+  <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'A INT')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DLL1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DLL2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DLL3}" width="780" height="940" /></p>
+   </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Caliza RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB1C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB2C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB3C}" width="780" height="940" /></p>
+   </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cantera TPB')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB21CA}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB22CA}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB23CA}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Porfido')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPB1P}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB2P}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPB3P}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+   <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Cabernet')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2C}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3C}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Nebbiolo')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Merlot')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Malbec RG')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.DTPG1MRG}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG2M}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPG3M}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Malbec')}">
+    <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.D_Malbec_GR_Memoria_D2}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Zinfandel RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR1Z}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR2Z}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPGR3Z}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acuarela RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3A}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acuarela_RG')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2A}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3A}" width="780" height="940" /></p>
+    </apex:outputPanel>
+
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'NOGAL NEO')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>
+    
+     <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'NOGAL URBANO')}">
+     <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ1N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ2N}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPJ3N}" width="780" height="940" /></p>
+    </apex:outputPanel>  
+    
+    <apex:outputPanel rendered="{!AND(casa.PricebookEntry.Product2.PrototipoLookUp__r.Name == 'Acacia')}">
+      <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_1}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_2}" width="780" height="940" /></p> <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_3}" width="780" height="940" /></p>   <P ALIGN="center">  <apex:image value="{!$Resource.DTPSAM4_4}" width="780" height="940" /></p>
+    </apex:outputPanel>  
+    
+           
+    <div id="anexo-1" style="text-align: left;" class="new-doc"></div>       
+        <div class="header">
+         <br /><br /><br />
+                    <table style="width: 100%;height: 20%;" >
+                    <tr>
+                        <td style="text-align: right;" >
+                        <apex:image width="25%" height="25%" id="logoVialli" value="{!$Resource.logo}" />                        
+                        </td>                
+                    </tr> 
+                     <tr>
+                        <td style="text-align: LEFT;  font-size: 8pt;" >  
+                          Estimado Oferente,
+                           <br /><br />
+                        </td>                
+                    </tr> 
+                      <tr>
+                        <td style="text-align: justify ;  font-size: 10px; font: Calibri ;" >  
+                            En primer término, queremos agradecer su preferencia y confianza por externar su deseo de compra de una vivienda ubicada en el Desarrollo <strong>“{!desarrollo.Nombre_largo__c}”</strong>, por lo que extendemos la intención del grupo empresarial que representamos Grupo Inmobiliario Vialli (el “Desarrollador”), para otorgar nuestro mejor servicio y seguridad a la operación que pretende realizar con nosotros, y con el objetivo de ofrecer un proceso transparente para llevar a cabo la compra-venta de una vivienda, será nuestro compromiso asesorarlo y acompañarlo para que de una manera profesional logre recibir una casa en las mejores condiciones y con el máximo de comodidades, sujeto a la previa aceptación de su Oferta de Compra.
+                            <br /><br />
+                            Con el objetivo de ofrecer un proceso transparente, de claro de asesoramiento y finalmente de compra-venta de una vivienda, es muy importante que esté enterado y de acuerdo con la información que se presenta a continuación:
+                        </td>                
+                    </tr> 
+                </table>
+            </div>  
+     <P ALIGN="center"> 
+      <br /><br /><br /><br /><br /><br />     
+      <br /><br /><br /><br /><br /><br />
+      <br /><br /><br /><br /><br /><br />
+      
+      <!-- cARTA OFERTA DEMANDA RECURSOS ESTATICOS UTILIADAOS __________________________________________________________________________  --> 
+     <apex:image value="{!$Resource.u_Consideraciones_A1}" width="820" /></p> 
+     
+     
+   <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != '')}">    
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A2}" width="800" height="945" /></p>
+  </apex:outputPanel>
+   
+     
+      <!-- SI DESSARROLLO ES DIFERENTE DE SAMARE REDNDER LA SEGUNDA HOJA QUE PERTENECE A CUALQUIER DESARROLLO _________________________-->
+  <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != 'Samare III')}">
+   <apex:outputPanel rendered="{!AND(desarrollo.Nombre_largo__c != 'Samare IV')}">     
+       <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A3}" width="800" height="945" /></p>
+       <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A4}" width="785" height="945" /></p>
+     </apex:outputPanel>
+  </apex:outputPanel> 
+    
+     
+
+<!-- SI DESSARROLLO ES IGUAL IGUAL A SAMARE REDNDER LA SEGUNDA Y TERCERA HOJA QUE PERTENECE A sAMARE _______________________-->
+     
+    <apex:outputPanel rendered="{!OR(desarrollo.Nombre_largo__c == 'Samare III',desarrollo.Nombre_largo__c == 'Samare IV' )}">    
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A3_Sam}" width="785" height="945" /></p>
+     <P ALIGN="center">  <apex:image value="{!$Resource.u_Consideraciones_A4_Sam}" width="785" height="945" /></p>
+    </apex:outputPanel> 
+
+   </apex:form>
+  </body>
+ </html>
+</apex:page>
